@@ -1,0 +1,16 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "dependencies": {
+        "iconify-icon": "^3.0.3",
+      },
+    },
+  },
+  "packages": {
+    "@iconify/types": ["@iconify/types@2.0.0", "", {}, "sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg=="],
+
+    "iconify-icon": ["iconify-icon@3.0.3", "", { "dependencies": { "@iconify/types": "^2.0.0" } }, "sha512-n4ZIChz3N75KqFSWLt9hHGzbrqGQeeoFxCE+nND4WFFa88x8AW8GvmnVZaVNYErhhiZkxJhBfVKMIGrF1wt3hg=="],
+  }
+}
