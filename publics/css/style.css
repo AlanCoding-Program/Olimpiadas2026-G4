@@ -3,13 +3,25 @@
     padding: 0;
     box-sizing: border-box;
 }
-body{
+body {
     margin: 0;
-    background-color: rgb(79, 157, 247);
+    min-height: 100vh;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(20, 40, 80, 0.25) 0%,
+            rgba(5, 15, 35, 0.75) 100%
+        ),
+        url("../img/fondos/cielo.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: Arial, sans-serif;
 }
 .logo{
-    width: 200px;
-    height: 100px;
+    width: 400px;
+    height: 200px;
     display: block;
     margin: 0 auto;
     animation: logo 1.5s ease-in-out forwards
@@ -29,6 +41,26 @@ body{
     }
 }
 .box1{
-    margin-top: 30px;
-    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid rgb(255, 255, 255);
+}
+.registerHTML{
+    margin-right: 30px;
+}
+.links{
+    display: flex;
+    gap: 30px;
+}
+.redirect {
+    color: white;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 20px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.redirect:hover {
+    color: #6fc3ff;
 }
