@@ -1,4 +1,13 @@
 {
+  "name": "olimpiadas2026-g4",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portal de ventas de paquetes turísticos",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js"
+  },
   "dependencies": {
     "iconify-icon": "^3.0.3"
   }
