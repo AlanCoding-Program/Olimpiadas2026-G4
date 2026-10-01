@@ -17,6 +17,23 @@ body {
     flex-direction: column;
     align-items: center;
 }
+.redirect {
+    color: white;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 20px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.redirect:hover {
+    color: #6fc3ff;
+}
+.links {
+    display: flex;
+    gap: 30px;
+}
+.noCuenta{
+    margin-bottom: auto
+}
 .box1 {
     width: 100%;
     display: flex;
