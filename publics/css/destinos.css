@@ -140,6 +140,98 @@ header p {
 .contenido button:hover {
     background: #4a36ff;
 }
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+
+    background-color: rgba(0, 0, 0, 0.7);
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1000;
+}
+
+.modal.activo {
+    display: flex;
+}
+
+.modal-contenido {
+    position: relative;
+    width: 500px;
+    max-width: 90%;
+    background-color: rgb(39, 39, 39);
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: cuadrado 0.75s ease-in-out forwards;
+}
+@keyframes cuadrado{
+    0% {
+        opacity: 0;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+.modal-contenido img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    color: white;
+}
+
+.modal-contenido h2 {
+    color: white;
+    font-family: system-ui, -apple-system
+}
+
+.modal-contenido p {
+    color: white;
+    line-height: 1.6;
+}
+
+.modal-contenido ul {
+    color: white;
+    text-align: left;
+    padding-left: 25px;
+}
+
+.modal-contenido li {
+    color: white;
+    margin-bottom: 10px;
+}
+
+.cerrar {
+    position: absolute;
+
+    top: 10px;
+    right: 15px;
+
+    border: none;
+    background: none;
+
+    font-size: 30px;
+
+    cursor: pointer;
+}
+#tituloDestino {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.tituloCapital{
+    color: white;
+}
+
+#tituloDestino iconify-icon {
+    width: 30px;
+}
 /* RESPONSIVE */
 @media (max-width: 900px) {
     .destinos {

@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="../publics/css/destinos.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.iconify.design/iconify-icon/3.0.3/iconify-icon.min.js"></script>
     <title>Destinos de Viaje</title>
 </head>
 <body>
@@ -87,7 +88,7 @@
                 </div>
             </article>
             <!--Japón-->
-            <article class="destino" data-destino="estambul">
+            <article class="destino" data-destino="tokyo">
                 <img src="../publics/img/japon/tokyo2.jpg" alt="Tokyo">
                 <div class="contenido">
                     <h2>Tokyo</h2>
@@ -112,7 +113,7 @@
             <article class="destino" data-destino="roma">
                 <img src="../publics/img/italia/roma2.jpg" alt="Roma">
                 <div class="contenido">
-                    <h2>Roma</h2>
+                    <h2">Roma</h2>
                     <p>Italia</p>
                     <button onclick="mostrarDestino('roma')">
                         Ver información
@@ -136,7 +137,7 @@
                 <div class="contenido">
                     <h2>Rio de Janeiro</h2>
                     <p>Brasil</p>
-                    <button onclick="mostrarDestino('riodeJaneiro')">
+                    <button onclick="mostrarDestino('rioDeJaneiro')">
                         Ver información
                     </button>
                 </div>
@@ -154,6 +155,23 @@
             </article>
         </section>
     </main>
+    <div id="modalDestino" class="modal">
+        <div class="modal-contenido">
+
+            <button class="cerrar" onclick="cerrarDestino()" >
+                <iconify-icon icon="akar-icons:cross"></iconify-icon>
+            </button>
+
+            <img id="imagenDestino" src="" alt="">
+
+            <h2 id="tituloDestino"></h2>
+
+            <p id="descripcionDestino"></p>
+
+            <ul id="datosDestino"></ul>
+
+        </div>
+    </div>
 
     <script src="../publics/js/destinos.js"></script>
 </body>
