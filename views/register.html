@@ -14,32 +14,34 @@
             <a class="redirect" href="destinos.html">Destinos</a>
         </div>
     </div>
-    <div class="bigBox">
+    <form class="bigBox" id="registerForm">
         <div class="inputs">
             <div class="fila">
                 <label for="username">
                     Ingresa tu nombre
                 </label>
-                <input type="text" id="username" placeholder="Juan">
+                <input type="text" id="username" name="nombre" placeholder="Juan" maxlength="80" autocomplete="given-name" required>
             </div>
             <div class="fila">
                 <label for="surname">
                     Ingresa tu apellido
                 </label>
-                <input type="text" id="surname" placeholder="Juarez">
+                <input type="text" id="surname" name="apellido" placeholder="Juarez" maxlength="80" autocomplete="family-name" required>
             </div>
             <div class="fila">
                 <label for="dni">
                     Ingresa tu DNI
                 </label>
-                <input type="text" id="dni" placeholder="12345678">
+                <input type="text" id="dni" name="dni" placeholder="12345678" inputmode="numeric" pattern="[0-9]{7,8}" maxlength="8" title="Ingresá 7 u 8 números, sin puntos" required>
+            </div>
+            <div class="fila">
+                <label for="email"> Ingresa tu correo electrónico </label>
+                <input type="email" id="email" name="email" placeholder="juan@gmail.com" autocomplete="email" maxlength="254" required>
             </div>
             <div class="fila passwordFila">
-                <label for="password">
-                    Ingresa una contraseña
-                </label>
+                <label for="password"> Ingresa una contraseña </label>
                 <div class="passwordContainer">
-                    <input type="password" id="password" placeholder="********">
+                    <input type="password" id="password" name="contra" placeholder="********" minlength="8" autocomplete="new-password" required>
                     <button type="button" id="togglePassword" aria-label="Mostrar contraseña">
                         <iconify-icon icon="akar-icons:eye"></iconify-icon>
                     </button>
@@ -47,15 +49,14 @@
             </div>
         </div>
         <div class="boton">
-            <button type="button">
-                Enviar
-            </button>
+            <button type="submit" id="registerButton"> Enviar </button>
         </div>
         <div>
             <a href="../views/login.html">¿Tienes una cuenta? Inicia Sesión</a>
         </div>
-    </div>
+    </form>
     <script src="https://code.iconify.design/iconify-icon/3.0.3/iconify-icon.min.js"></script>
-    <script src="../publics/js/script.js"></script>
+    <script src="../publics/js/passwordToggle.js"></script>
+    <script src="../publics/js/register.js"></script>
 </body>
 </html>
