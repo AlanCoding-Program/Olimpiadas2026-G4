@@ -376,7 +376,6 @@ function mostrarPaquetes(lista){
             <p>
                 Pais:
                 ${paquete.pais}
-                ${paquetes.bandera}
             </p>
             <p class="Hotel">
                 Hotel:
@@ -389,7 +388,7 @@ function mostrarPaquetes(lista){
                 7 Días, 6 Noches
             </p>
             ${
-                paquete.tipo === "ALL Inclusive"
+                paquete.tipo.trim().toLowerCase() === "all inclusive"
                 ?
                 `
                 <p>Guía privada</p>
@@ -428,9 +427,10 @@ inputBusqueda.addEventListener("input", () =>{
 });
 
 function agregarAlCarrito(id) {
-    const paquete = paquete.find(
+    const paquete = paquetes.find(
         paquete => paquete.id === id
     );
+    if (!paquete) return;
 
     const productoExistente = carrito.find(
         producto => producto.id === id
@@ -486,23 +486,14 @@ function mostrarCarrito() {
                 USD${producto.precio}
             </p>
             <div class="controles">
-                <button
-                    onClick="disminuirCantidad(${producto.id})
-                    >-
-                </button>
-                <span>
-                    ${producto.cantidad}
-                </span>
-                <button
-                    onClick="aumentarCantidad(${producto.id})"
-                    >+
-                </button>
+              <button type="button" onclick="disminuirCantidad(${producto.id})" aria-label="Disminuir cantidad">−</button>
+              
+              <span>${producto.cantidad}</span>
+              
+              <button type="button" onclick="aumentarCantidad(${producto.id})" aria-label="Aumentar cantidad">+</button>
             </div>
-            <button
-                class="eliminar"
-                onClick="eliminarDelCarrito${producto.id})"
-                >Eliminar
-            </button>
+            
+            <button type="button" class="eliminar" onclick="eliminarDelCarrito(${producto.id})">Eliminar</button>
         `;
         productosCarrito.appendChild(div);
     });
