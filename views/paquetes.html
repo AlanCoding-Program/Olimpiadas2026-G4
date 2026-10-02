@@ -14,6 +14,37 @@
                 <a class="redirect" href="destinos.html">Destinos</a>
             </div>
     </div>
-    
+    <div class="buscador">
+        <input type="text"
+        id="busqueda"
+        placeholder="¿A dónde quieres Viajar?">
+    </div>
+    <button id="btnCarrito">
+        Carrito
+        <span id="cantidadCarrito">0</span>
+    </button>
+    <h2>Destinos</h2>
+        <div class="buscador"> <input type="text" id="busqueda" placeholder="¿A dónde querés viajar?" > </div> <button id="btnCarrito" class="btn-carrito"> 🛒 Carrito <span id="cantidadCarrito">0</span> </button> </header> <main> <h2>Destinos</h2> <section id="contenedorPaquetes" class="paquetes"> <!-- Los paquetes aparecen acá mediante JavaScript --> </section> 
+    </main>
+    <!--Carrito-->
+    <aside id="carrito" class="carrito">
+        <div class="carrito-header">
+            <h2>Mi carrito</h2>
+            <button
+                id="cerrarCarrito">X
+            </button>
+        </div>
+        <div id="productosCarrito" class="productosCarrito"><!--productos del carrito--></div>
+        <div class="carrito-footer">
+            <h3>
+                Total:
+                $<span
+                id="totalCarrito">0</span>
+            </h3>
+            <button id="vaciarCarrito" class="vaciar">Vaciar carrito</button>
+        </div>
+
+    </aside>
+    <script src="../publics/js/paquetes.js"></script>
 </body>
 </html>
