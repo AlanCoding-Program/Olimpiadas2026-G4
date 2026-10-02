@@ -51,6 +51,7 @@ const paquetes = [
         destino: "Londres",
         pais: "Inglaterra",
         tipo: "All inclusive",
+        bandera: "flag:in-4x3",
         precio: 4200,
         hotel: "The Savoy",
         auto: "Bentley Continental GT"
@@ -61,6 +62,7 @@ const paquetes = [
         destino: "Paris",
         pais: "Francia",
         tipo: "Económico",
+        bandera: "flag:cp-4x3",
         precio: 850,
         hotel: "Ibis Budget Paris Porte de Montmartre",
         auto: "Sin auto"
@@ -70,6 +72,7 @@ const paquetes = [
         destino: "Paris",
         pais: "Francia",
         tipo: "Intermedio",
+        bandera: "flag:cp-4x3",
         precio: 1650,
         hotel: "Novotel Paris Centre Tour Eiffel",
         auto: "Mercedez-Benz Clase C"
@@ -78,6 +81,7 @@ const paquetes = [
         id: 9,
         destino: "París",
         pais: "Francia",
+        bandera: "flag:cp-4x3",
         tipo: "All inclusive",
         precio: 4500,
         hotel: "Ritz Paris",
@@ -322,6 +326,7 @@ const paquetes = [
         destino: "Moscú",
         pais: "Rusia", 
         tipo: "Intermedio",
+        bandera: "",
         precio: 1500,
         hotel: "Novotel Moscow City",
         auto: "Toyota Camry"
@@ -366,19 +371,22 @@ function mostrarPaquetes(lista){
         card.classList.add("card");
         card.innerHTML = `
         
-            <h3>${paquete.destino}</h3>
-            <p class="tipo">${paquete.tipo}</p>
+            <h3 class="tipo">${paquete.destino}</h3>
+            <p>${paquete.tipo}</p>
             <p>
+                Pais:
                 ${paquete.pais}
+                ${paquetes.bandera}
             </p>
-            <p>
+            <p class="Hotel">
+                Hotel:
                 ${paquete.hotel}
             </p>
             <p>
                 ${paquete.auto}
             </p>
             <p>
-                7 Días
+                7 Días, 6 Noches
             </p>
             ${
                 paquete.tipo === "ALL Inclusive"
@@ -453,7 +461,7 @@ function mostrarCarrito() {
 
     if (carrito.length === 0) {
         productosCarrito.innerHTML = `
-            <p>
+            <p class="precio">
                 Tu carrito está vacío.
             </p>
         `;
@@ -468,13 +476,13 @@ function mostrarCarrito() {
 
         div.classList.add("producto-carrito");
         div.innerHTML = `
-            <h4>
+            <h4 class="destinoP">
                 ${producto.destino}
             </h4>
             <p>
                 ${producto.tipo}
             </p>
-            <p>
+            <p class="precio">
                 USD${producto.precio}
             </p>
             <div class="controles">
@@ -548,7 +556,7 @@ document.getElementById("btnCarrito").addEventListener("click", () => {
 });
 //cerrar carrito
 document.getElementById("cerrarCarrito").addEventListener("click", () =>{
-    carritoElemento.classList.remove("aierto");
+    carritoElemento.classList.remove("abierto");
 });
 //inicio
 //acá mostramos todos los paquetes disponibles en la página xd (no quiero programar más)

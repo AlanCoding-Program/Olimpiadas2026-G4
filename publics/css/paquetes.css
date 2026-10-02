@@ -38,6 +38,9 @@ body {
 .registerHTML{
     margin-right: 30px;
 }
+.carritoLetras{
+    color: white;
+}
 .redirect {
     color: white;
     font-family: system-ui, -apple-system, sans-serif;
@@ -58,4 +61,223 @@ body {
     align-items: center;
     justify-content: center;
     border-bottom: 2px solid rgb(255, 255, 255);
+}
+header{
+    padding: 30px;
+    text-align: center;
+    background: #171b24;
+    position: relative;
+}
+header h1{
+    margin-bottom: 25px;
+    font-size: 35px;
+}
+.hotel{
+    color: white;
+}
+/*barra*/
+.buscador input {
+    width: 450px;
+    max-width: 90%;
+    padding: 15px 20px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 30px;
+    outline: none;
+    font-size: 16px;
+}
+/*comprar boton*/
+.btn-carrito{
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #6fc3ff;
+    color: #10131a;
+    font-weight: bold;
+    cursor: pointer;
+}
+#cantidadCarrito {
+    background: #ff4d6d;
+    color: white;
+    padding: 3px 7px;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+/*contenido*/
+main{
+    padding: 40px
+}
+main h2{
+    margin-bottom: 25px;
+}
+/*Paquetes*/
+.paquetes{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+/*Tarjeta*/
+.card{
+    background: #1b202b;
+    border-radius: 15px;
+    padding: 25px;
+    border: 1px solid #2c3443;
+    transition: 0.3s;
+}
+.card:hover{
+    transform: translateY(-5px);
+    border-color: #6fc3ff;
+}
+.card h3{
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+.card .tipo{
+    color: white;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+.card p {
+    font-size: 27px;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #6fc3ff
+}
+/*Botón agregar*/
+.btn-agregar{
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: #6fc3ff;
+    color: #10131a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-agregar:hover{
+    background: #9bd8ff;
+}
+/*El carrito*/
+.carrito{
+    position: fixed;
+    right: -400px;
+    top: 0;
+    width: 380px;
+    max-width: 90%;
+    height: 100vh;
+    background: #171b24;
+    box-shadow: -5px 0 20px rgba(0,0,0,0,0.5);
+    transition: 0.3s;
+    z-index: 100;
+}
+.carrito.abierto{
+    right:0;
+}
+/*header del carrito*/
+.carrito-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #303744;
+}
+.carrito-header button{
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+}
+/*Productos*/
+.productos-carrito{
+    padding: 20px;
+    height: calc(100vh - 170px);
+    overflow-y: auto;
+}
+.producto-carrito h4{
+    margin-bottom: 8px;
+}
+.producto-carrito p{
+    color: #6fc3ff;
+    margin-bottom: 10px;
+}
+/*controles*/
+.controles{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.controles button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+/*eliminar*/
+.eliminar{
+    margin-top: 10px;
+    background: #ff4d6d;
+    color: white;
+    border: none;
+    padding: 7px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+/*Footer*/
+.carrito-footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    background: #1d222c;
+    border-top: 1px solid #303744;
+}
+.carrito-footer h3{
+    margin-bottom: 12px;
+}
+.cross{
+    color: white;
+}
+.precio{
+    color:white;
+}
+.destinoP{
+    color: white;
+}
+.vaciar{
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 7px;
+    background: #ff4d6d;
+    color: white;
+    cursor: pointer;
+}
+.sin-resultados{
+    text-align: center;
+    color: #aaa;
+    grid-column: 1 / -1;
+    font-size: 20px;
+}
+/*responsive*/
+@media (max-width: 600px){
+    header{
+        padding: 25px 15px 30px;
+    }
+    .btn-carrito{
+        position: static;
+        margin-top: 20px;
+    }
+    main{
+        padding: 25px 15px;
+    }
+    .carrito{
+        width: 100%;
+        max-width: 100%;
+    }
 }
