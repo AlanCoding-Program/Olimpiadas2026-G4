@@ -1,48 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <link rel="stylesheet" href="/publics/css/login.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="../publics/css/login.css">
+    <title>Iniciar sesión</title>
 </head>
 <body>
     <div class="box1">
-        <img class="logo" src="../admin/assets/logo.png" alt="logoEmpresa">
+        <img class="logo" src="../admin/assets/logo.png" alt="Logo de la empresa">
+
         <div class="links">
-            <a class="redirect"  id="registerHTML" href="../views/index.html">Home</a>
+            <a class="redirect" href="../views/index.html">Home</a>
             <a class="redirect" href="destinos.html">Destinos</a>
         </div>
     </div>
-    <div class="bigBox">
+
+    <form class="bigBox" id="loginForm">
         <div class="fila">
-                    <label for="dni">
-                        Ingresa tu DNI
-                    </label>
-                    <input type="text" id="dni" placeholder="12345678">
-                </div>
-                <div class="fila passwordFila">
-                    <label for="password">
-                        Ingresa una contraseña
-                    </label>
-                    <div class="passwordContainer">
-                        <input type="password" id="password" placeholder="********">
-                        <button type="button" id="togglePassword" aria-label="Mostrar contraseña">
-                            <iconify-icon icon="akar-icons:eye"></iconify-icon>
-                        </button>
-                    </div>
-                </div>
-            <div class="boton">
-                <button type="button">
-                    Enviar
+            <label for="email">Ingresá tu correo electrónico</label>
+            <input type="email" id="email" name="email" placeholder="juan@gmail.com" autocomplete="username" maxlength="254" required>
+        </div>
+
+        <div class="fila passwordFila">
+            <label for="password">Ingresá tu contraseña</label>
+            <div class="passwordContainer">
+                <input type="password" id="password" name="contra" placeholder="********" autocomplete="current-password" required>
+
+                <button type="button" id="togglePassword" aria-label="Mostrar contraseña">
+                    <iconify-icon icon="akar-icons:eye"></iconify-icon>
                 </button>
             </div>
-            <div class="noCuenta">
-                <a href="../views/register.html">¿No tienes una cuenta? Crea una</a>
-            </div>
-    </div>
-    
+        </div>
+
+        <div class="boton">
+            <button type="submit" id="loginButton"> Iniciar sesión </button>
+        </div>
+
+        <p id="loginMensaje" role="status" aria-live="polite"></p>
+
+        <div class="noCuenta">
+            <a href="../views/register.html"> ¿No tenés una cuenta? Creá una </a>
+        </div>
+    </form>
 
     <script src="https://code.iconify.design/iconify-icon/3.0.3/iconify-icon.min.js"></script>
+    <script src="../publics/js/passwordToggle.js"></script>
+    <script src="../publics/js/login.js"></script>
 </body>
 </html>
