@@ -3,6 +3,7 @@ const path = require("node:path");
 
 const pool = require("./config/database");
 const usuariosRoutes = require("./routes/usuariosRoutes");
+const paquetesRoutes = require("./routes/paquetesRoutes");
 const sessionMiddleware = require("./config/session");
 
 const app = express();
@@ -20,28 +21,19 @@ app.get("/views/register.html", (req, res) => {
 
 app.use("/api", sessionMiddleware);
 app.use("/api/usuarios", usuariosRoutes);
+app.use("/api/paquetes", paquetesRoutes);
 
 app.get("/", (req, res) => {
-    res.json({
-        mensaje: "Backend de Olimpiadas funcionando"
-    });
+    res.json({ mensaje: "Backend de Olimpiadas funcionando" });
 });
 
 app.get("/api/health", async (req, res) => {
     try {
         await pool.query("SELECT 1");
-
-        res.json({
-            servidor: "ok",
-            base_de_datos: "conectada"
-        });
+        res.json({ servidor: "ok", base_de_datos: "conectada"});
     } catch (error) {
         console.error("Falló la consulta de prueba:", error.code);
-
-        res.status(503).json({
-            servidor: "ok",
-            base_de_datos: "no disponible"
-        });
+        res.status(503).json({servidor: "ok", base_de_datos: "no disponible"});
     }
 });
 
@@ -51,6 +43,14 @@ app.get("/views/login.html", (req, res) => {
 
 app.get("/views/index.html", (req, res) => {
     res.sendFile(path.join(__dirname, "../views/index.html"));
+});
+
+app.get("/views/paquetes.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "../views/paquetes.html"));
+});
+
+app.get("/views/destinos.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "../views/destinos.html"));
 });
 
 module.exports = app;

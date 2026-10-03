@@ -140,6 +140,14 @@ main h2{
     font-weight: bold;
     margin-bottom: 15px;
 }
+.card h1{
+    text-align: center;
+}
+.card h3{
+    color: white;
+    background-color: 6fc3ff;
+    text-align: center;
+}
 .card p {
     font-size: 27px;
     font-weight: bold;
@@ -280,4 +288,139 @@ main h2{
         width: 100%;
         max-width: 100%;
     }
+}
+
+/* Ajustes para el carrito personalizable */
+* {
+    box-sizing: border-box;
+}
+
+.logo {
+    max-width: 100%;
+    height: auto;
+}
+
+.paquetes {
+    grid-template-columns:
+        repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.card p {
+    font-size: 18px;
+    margin: 0;
+}
+
+.card small {
+    display: block;
+    color: #cbd5e1;
+    line-height: 1.5;
+}
+
+.card .precio {
+    margin-top: auto;
+    padding-top: 12px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.carrito {
+    right: 0;
+    width: 480px;
+    max-width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 0.3s, visibility 0.3s;
+}
+
+.carrito.abierto {
+    transform: translateX(0);
+    visibility: visible;
+}
+
+.carrito-header,
+.carrito-footer {
+    flex-shrink: 0;
+}
+
+.productos-carrito {
+    flex: 1;
+    min-height: 0;
+    height: auto;
+    overflow-y: auto;
+}
+
+.carrito-footer {
+    position: static;
+    width: 100%;
+    padding: 16px 20px;
+}
+
+.producto-carrito {
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #445066;
+}
+
+.producto-carrito h4 {
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.campo-carrito {
+    display: block;
+    margin: 14px 0;
+    color: #fff;
+}
+
+.campo-carrito span {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.campo-carrito select,
+.campo-carrito input {
+    width: 100%;
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid #526078;
+    border-radius: 6px;
+    background: #fff;
+    color: #111827;
+    font: inherit;
+}
+
+.campo-carrito select:focus,
+.campo-carrito input:focus {
+    outline: 2px solid #6fc3ff;
+    outline-offset: 2px;
+}
+
+.producto-carrito .aviso-capacidad {
+    color: #ffdc85;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.producto-carrito strong {
+    display: block;
+    margin-top: 16px;
+}
+
+.mensaje-carrito {
+    color: #ffdc85;
+    font-size: 14px;
+}
+
+.mensaje-carrito:empty {
+    display: none;
 }

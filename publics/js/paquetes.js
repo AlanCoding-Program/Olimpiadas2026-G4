@@ -1,555 +1,333 @@
-const paquetes = [
-    //Ibiza
-    {
-        id: 1,
-        destino: "Ibiza",
-        pais: "España",
-        tipo: "económico",
-        precio: 850,
-        hotel: "Hotel Vibra Mare Nostrum",
-        auto: "Sin auto"
-    },
-    {
-        id: 2,
-        destino: "Ibiza",
-        pais: "España",
-        tipo: "Intermedio",
-        precio: 1450,
-        hotel: "Hotel Torre del Mar",
-        auto: "Volkswagen Golf"
-    },
-    {
-        id: 3,
-        destino: "Ibiza",
-        pais: "España",
-        tipo: "All Inclusive",
-        precio: 3500,
-        hotel: "Nobu Hotel Ibiza Bay",
-        auto: "Porsche 911 Carrera"
-    },
-    //Londres
-    {
-        id: 4,
-        destino: "Londres",
-        pais: "Inglaterra",
-        tipo: "Económico",
-        precio: 900,
-        hotel: "Ibis London City",
-        auto: "Sin auto"
-    },
-    {
-        id: 5,
-        destino: "Londres",
-        pais: "Inglaterra",
-        tipo: "Intermedio",
-        precio: 1700,
-        hotel: "Novotel London Waterloo",
-        auto: "BMW Serie 3"
-    },
-    {
-        id: 6,
-        destino: "Londres",
-        pais: "Inglaterra",
-        tipo: "All inclusive",
-        bandera: "flag:in-4x3",
-        precio: 4200,
-        hotel: "The Savoy",
-        auto: "Bentley Continental GT"
-    },
-    //Paris
-    {
-        id: 7,
-        destino: "Paris",
-        pais: "Francia",
-        tipo: "Económico",
-        bandera: "flag:cp-4x3",
-        precio: 850,
-        hotel: "Ibis Budget Paris Porte de Montmartre",
-        auto: "Sin auto"
-    },
-    {
-        id: 8,
-        destino: "Paris",
-        pais: "Francia",
-        tipo: "Intermedio",
-        bandera: "flag:cp-4x3",
-        precio: 1650,
-        hotel: "Novotel Paris Centre Tour Eiffel",
-        auto: "Mercedez-Benz Clase C"
-    },
-    {
-        id: 9,
-        destino: "París",
-        pais: "Francia",
-        bandera: "flag:cp-4x3",
-        tipo: "All inclusive",
-        precio: 4500,
-        hotel: "Ritz Paris",
-        auto: "Porsche Carrera"
-    },
-    //Buenos Aires
-    {
-        id: 10,
-        destino: "Buenos Aires",
-        pais: "Argentina",
-        tipo: "Económico",
-        precio: 400,
-        hotel: "Ibis Buenos Aires Congreso",
-        auto: "Sin Auto"
-    },
-    {
-        id: 11,
-        destino: "Buenos Aires",
-        pais: "Argentina",
-        tipo: "Intermedio",
-        precio: 800,
-        hotel: "Dazzler Buenos Aires Palermo",
-        auto: "Toyota Corolla"
-    },
-    {
-        id: 12,
-        destino: "Buenos Aires",
-        pais: "Argentina",
-        tipo: "All Inclusive",
-        precio: 2200,
-        hotel: "Park Tower Buenos Aires",
-        auto: "BMW M4"
-    },
-    //Estambul
-    {
-        id: 13,
-        destino: "Estambul",
-        pais: "Turquía",
-        tipo: "Económico",
-        precio: 700,
-        hotel: "Ibis Styles Istanbul Bomonti",
-        auto: "Sin auto"
-    },
-    {
-        id: 14,
-        destino: "Estambul",
-        pais: "Turquía",
-        tipo: "Intermedio",
-        precio: 1300,
-        hotel: "Novotel Istanbul Bosphorus",
-        auto: "Mercedez-Benz Clase E"
-    },
-    {
-        id: 15,
-        destino: "Estambul",
-        pais: "Turquía",
-        tipo: "ALl Inclusive",
-        precio: 3200,
-        hotel: "JW Marriott Instanbul Bosphorus",
-        auto: "Porsche Cayenne"
-    },
-    //Roma
-    {
-        id: 16,
-        destino: "Roma",
-        pais: "Italia",
-        tipo: "Económico",
-        precio: 800,
-        hotel: "Ibis Styles Roma Aurelia",
-        auto: "Sin auto"
-    },
-    {
-        id: 17,
-        destino: "Roma",
-        pais: "Italia",
-        tipo: "Intermedio",
-        precio: 1500,
-        hotel: "NH Collection Roma Palazzo Cinquecento",
-        auto: "Audi A4"
-    },
-    {
-        id: 18,
-        destino: "Roma",
-        pais: "Italia",
-        tipo: "All inclusive",
-        precio: 4000,
-        hotel: "Bvlgari Hotel Roma",
-        auto: "Ferrari Roma"
-    },
-    //Dubai
-    {
-        id: 19,
-        destino: "Roma",
-        pais: "Italia",
-        tipo: "Económico",
-        precio: 1000,
-        hotel: "Ibis One Central",
-        auto: "Sin auto"
-    },
-    {
-        id: 20, 
-        destino: "Dubai",
-        pais: "Émiratos Árabes Unidos",
-        tipo: "Intermedio",
-        precio: 1900,
-        hotel: "Aloft Palm Jumeirah",
-        auto: "BMW Serie 5"
-    },
-    {
-        id: 21,
-        destino: "Dubai",
-        pais: "Émiratos Árabes Unidos",
-        tipo: "All Inclusive",
-        precio: 5000,
-        hotel: "JW Marriott Marquis Dubai",
-        auto: "Lamborghini Urus"
-    },
-    //Berlin
-    {
-        id: 22,
-        destino: "Berlín",
-        pais: "Alemania",
-        tipo: "Económico",
-        precio: 850,
-        hotel: "Ibis Budget Berlín Alexanderplatz",
-        auto: "Sin Auto"
-    },
-    {
-        id: 23,
-        destino: "Berlín",
-        pais: "Alemnia",
-        tipo: "Intermedio",
-        precio: 1500,
-        hotel: "Novotel Berlin Mitte",
-        auto: "Volkswagen Passat"
-    },
-    {
-        id: 24,
-        destino: "Berlín",
-        pais: "Alemania",
-        tipo: "All Inclusive",
-        precio: 3800,
-        hotel: "Hotel Adlon Kempinski Berlin",
-        auto: "Mercedes-AMG GT"
-    },
-    //Rio
-    {
-        id: 25,
-        destino: "Rio de Janeiro",
-        pais: "Brasil",
-        tipo: "Económico",
-        precio: 650,
-        hotel: "Ibis Budget Copacabana RJ",
-        auto: "Sin auto"
-    },
-    {
-        id: 26,
-        destino: "Rio de Janeiro",
-        pais: "Brasil",
-        tipo: "Intermedio",
-        precio: 1200,
-        hotel: "Novotel Rio de Janeiro",
-        auto: "Jeep Compass"
-    },
-    {
-        id: 27,
-        destino: "Rio de Janeiro",
-        pais: "Brasil",
-        tipo: "All Inclusive",
-        precio: 3500,
-        hotel: "Copacabana Palace",
-        auto: "Toyota Supra MK4"
-    },
-    //Miami
-    {
-        id: 28,
-        destino: "Miami",
-        pais: "Estados Unidos",
-        tipo: "Económico",
-        precio: 900,
-        hotel: "Holiday Inn Miami Beach-Oceanfront",
-        auto: "Sin auto"
-    },
-    {
-        id: 29,
-        destino: "Miami",
-        pais: "Estados Unidos",
-        tipo: "Intermedio",
-        precio: 1800,
-        hotel: "Hilton Miami Downtown",
-        auto: "Ford Mustang"
-    },
-    {
-        id: 30,
-        destino: "Miami",
-        pais: "Estados Unidos",
-        tipo: "All Inclusive",
-        precio: 4800,
-        hotel: "Faena Miami Beach",
-        auto: "Lamborghini Huracán"
-    },
-    //Tokyo
-    {
-        id: 31,
-        destino: "Tokyo",
-        pais: "Japón",
-        tipo: "Económico",
-        precio: 1000,
-        hotel: "APA Hotel Shinjuku",
-        auto: "Sin auto"
-    },
-    {
-        id: 32,
-        destino: "Tokyo",
-        pais: "Japón",
-        tipo: "Intermedio",
-        precio: 1800,
-        hotel: "Hotel Metropolitan Tokyo",
-        auto: "Toyota Crown"
-    },
-    {
-        id: 33,
-        destino: "Tokyo",
-        pais: "Japón", 
-        tipo: "All Inclusive",
-        precio: 5000,
-        hotel: "The Ritz-Carlton, Tokyo",
-        auto: "Mazda RX-7"
-    },
-    //Moscú
-    {
-        id: 34,
-        destino: "Moscú",
-        pais: "Rusia",
-        tipo: "Económico",
-        precio: 800,
-        hotel: "Ibis Moscow Kievskaya",
-        auto: "Sin auto"
-    },
-    {
-        id: 35,
-        destino: "Moscú",
-        pais: "Rusia", 
-        tipo: "Intermedio",
-        bandera: "",
-        precio: 1500,
-        hotel: "Novotel Moscow City",
-        auto: "Toyota Camry"
-    },
-    {
-        id: 36,
-        destino: "Moscú",
-        pais: "Rusia",
-        tipo: "All Inclusive",
-        precio: 4000,
-        hotel: "The St. Regis Moscow Nikolskaya",
-        auto: "Mercedes-AMG GT"
-    }
-]
 const contenedor = document.getElementById("contenedorPaquetes");
 const inputBusqueda = document.getElementById("busqueda");
 const carritoElemento = document.getElementById("carrito");
 const productosCarrito = document.getElementById("productosCarrito");
 const totalCarrito = document.getElementById("totalCarrito");
 const cantidadCarrito = document.getElementById("cantidadCarrito");
+const mensajeCarrito = document.getElementById("mensajeCarrito");
 
-//Carrito acá
 
-let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+const CLAVE_CARRITO = "olimpiadas_carrito_v2";
 
-//Mostramos los paquetes acá
+const formatoPrecio = new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS"
+});
 
-function mostrarPaquetes(lista){
-    contenedor.innerHTML = "";
+let paquetes = [];
+let carrito = [];
 
-    if (lista.length === 0) {
-        contenedor.innerHTML = `
-            <p class="sin-resultados">
-                No encontramos ese destino.
-            </p>
-        `;
+function precio(centavos) {return formatoPrecio.format(centavos / 100);}
+
+function centavos(valor) {return Math.round(Number(valor) * 100);}
+
+
+function crearElemento(etiqueta, texto, clase) {
+    const elemento = document.createElement(etiqueta);
+
+    if (texto !== undefined) elemento.textContent = texto;
+    if (clase) elemento.className = clase;
+
+    return elemento;
+}
+
+function crearBoton(texto, clase, accion) {
+    const boton = crearElemento("button", texto, clase);
+    boton.type = "button";
+    boton.addEventListener("click", accion);
+    return boton;
+}
+
+function buscarPaquete(id) {return paquetes.find((paquete) => paquete.id === id);}
+
+function obtenerServicios(paquete, seleccion) {
+    return {
+        vuelo: paquete.opciones.vuelos.find((opcion) => opcion.codigo === seleccion.vuelo),
+        hospedaje: paquete.opciones.hospedajes.find((opcion) => opcion.codigo === seleccion.hospedaje),
+        auto: seleccion.auto === null ? null : paquete.opciones.autos.find((opcion) => opcion.codigo === seleccion.auto)
+    };
+}
+
+function seleccionValida(paquete, seleccion) {
+    if (!seleccion || typeof seleccion !== "object") return false;
+    const { vuelo, hospedaje, auto } = obtenerServicios(paquete, seleccion);
+
+    return Boolean(vuelo && hospedaje && (seleccion.auto === null ? paquete.permiteSinAuto : auto));
+}
+
+function calcular(paquete, item) {
+    const servicios = obtenerServicios(paquete, item.seleccion);
+
+    const cantidadHospedajes = Math.ceil(item.viajeros / servicios.hospedaje.capacidadPersonas);
+
+    const cantidadAutos = servicios.auto ? Math.ceil(item.viajeros / servicios.auto.capacidadPersonas) : 0;
+
+    const totalVuelos = item.viajeros * centavos(servicios.vuelo.precioUnitario);
+
+    const totalHospedajes = cantidadHospedajes * centavos(servicios.hospedaje.precioUnitario);
+
+    const totalAutos = servicios.auto ? cantidadAutos * centavos(servicios.auto.precioUnitario) : 0;
+
+    return {
+        ...servicios,
+        cantidadHospedajes,
+        cantidadAutos,
+        totalVuelos,
+        totalHospedajes,
+        totalAutos,
+        total: totalVuelos + totalHospedajes + totalAutos
+    };
+}
+
+function guardarCarrito() {
+    try {
+        localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito));
+    } catch {
+        mensajeCarrito.textContent = "El navegador no pudo guardar el carrito para otra visita.";
+    }
+}
+
+function recuperarCarrito() {
+    try {
+        const guardado = JSON.parse(localStorage.getItem(CLAVE_CARRITO) || "[]");
+
+        if (!Array.isArray(guardado)) {throw new Error("Formato de carrito inválido");}
+
+        let descartados = 0;
+
+        carrito = guardado.flatMap((item) => { 
+            const paquete = buscarPaquete(item?.paqueteId);
+
+            if (!paquete || !Number.isInteger(item.viajeros) || item.viajeros < 1 || item.viajeros > 100 || !seleccionValida(paquete, item.seleccion)) {
+                descartados++;
+                return [];
+            }
+
+            return [{
+                id: crypto.randomUUID(),
+                paqueteId: paquete.id,
+                viajeros: item.viajeros,
+                seleccion: {
+                    vuelo: item.seleccion.vuelo,
+                    hospedaje: item.seleccion.hospedaje,
+                    auto: item.seleccion.auto
+                }
+            }];
+        });
+
+        if (descartados) {mensajeCarrito.textContent = "Se quitaron selecciones guardadas que ya no están disponibles.";}
+    } catch {
+        carrito = [];
+        mensajeCarrito.textContent = "No se pudo recuperar el carrito anterior.";
+    }
+}
+
+function mostrarPaquetes() {
+    const texto = inputBusqueda.value.trim().toLocaleLowerCase("es");
+
+    const filtrados = paquetes.filter((paquete) => `${paquete.destino} ${paquete.pais} ${paquete.tipo}`
+            .toLocaleLowerCase("es")
+            .includes(texto)
+    );
+
+    contenedor.replaceChildren();
+
+    if (!filtrados.length) {
+        contenedor.append(crearElemento("p", "No encontramos ese destino.", "sin-resultados"));
         return;
     }
 
-    lista.forEach(paquete => {
-        const card = document.createElement("article");
-        card.classList.add("card");
-        card.innerHTML = `
-        
-            <h3 class="tipo">${paquete.destino}</h3>
-            <p>${paquete.tipo}</p>
-            <p>
-                Pais:
-                ${paquete.pais}
-            </p>
-            <p class="Hotel">
-                Hotel:
-                ${paquete.hotel}
-            </p>
-            <p>
-                ${paquete.auto}
-            </p>
-            <p>
-                7 Días, 6 Noches
-            </p>
-            ${
-                paquete.tipo.trim().toLowerCase() === "all inclusive"
-                ?
-                `
-                <p>Guía privada</p>
-                <p>Buffet Incluido</p>
-                <p>Barra Libre 24 horas</p>
-                `
-                :
-                ""
-            } 
-            <div class="precio">
-                USD ${paquete.precio}
-            </div>
+    filtrados.forEach((paquete) => {
+        const servicios = obtenerServicios(paquete,paquete.seleccionInicial);
 
-            <button 
-                class="btn-agregar"
-                onClick="agregarAlCarrito(${paquete.id})"
-            >
-                Agregar al carrito
-            </button>
-        `;
-        contenedor.appendChild(card);
-    });
-}
-//Buscador
-inputBusqueda.addEventListener("input", () =>{
-    const texto = inputBusqueda.value
-    .toLowerCase()
-    .trim();
+        const tarjeta = crearElemento("article", undefined, "card");
 
-    const resultados = paquetes.filter(paquete =>
-        paquete.destino
-            .toLowerCase()
-            .includes(texto)
-    );
-    mostrarPaquetes(resultados);
-});
-
-function agregarAlCarrito(id) {
-    const paquete = paquetes.find(
-        paquete => paquete.id === id
-    );
-    if (!paquete) return;
-
-    const productoExistente = carrito.find(
-        producto => producto.id === id
-    );
-
-    if (productoExistente) {
-        productoExistente.cantidad++;
-    } else {
-        carrito.push({
-            ...paquete,
-            cantidad: 1
-        });
-    }
-    guardarCarrito();
-    mostrarCarrito();
-}
-//guardamos en localStorage
-function guardarCarrito() {
-    localStorage.setItem(
-        "carrito",
-        JSON.stringify(carrito)
-    );
-}
-
-//mostramos el carrito
-function mostrarCarrito() {
-    productosCarrito.innerHTML = "";
-
-    if (carrito.length === 0) {
-        productosCarrito.innerHTML = `
-            <p class="precio">
-                Tu carrito está vacío.
-            </p>
-        `;
-    }
-    let total = 0;
-    let cantidad = 0;
-    
-    carrito.forEach(producto => {
-        total += producto.precio * producto.cantidad;
-        cantidad += producto.cantidad;
-        const div = document.createElement("div");
-
-        div.classList.add("producto-carrito");
-        div.innerHTML = `
-            <h4 class="destinoP">
-                ${producto.destino}
-            </h4>
-            <p>
-                ${producto.tipo}
-            </p>
-            <p class="precio">
-                USD${producto.precio}
-            </p>
-            <div class="controles">
-              <button type="button" onclick="disminuirCantidad(${producto.id})" aria-label="Disminuir cantidad">−</button>
-              
-              <span>${producto.cantidad}</span>
-              
-              <button type="button" onclick="aumentarCantidad(${producto.id})" aria-label="Aumentar cantidad">+</button>
-            </div>
-            
-            <button type="button" class="eliminar" onclick="eliminarDelCarrito(${producto.id})">Eliminar</button>
-        `;
-        productosCarrito.appendChild(div);
-    });
-    totalCarrito.textContent = total;
-    cantidadCarrito.textContent = cantidad;
-}
-//aumentar cantidad de productos
-function aumentarCantidad(id) {
-    const producto = carrito.find(
-        producto => producto.id === id
-    );
-
-    producto.cantidad++;
-    guardarCarrito();
-    mostrarCarrito();
-}
-
-//disminuir cantidad de productos
-function disminuirCantidad(id){
-    const producto = carrito.find(
-        producto => producto.id === id
-    );
-
-    producto.cantidad--;
-
-    if(producto.cantidad <= 0) {
-        carrito = carrito.filter(
-            producto => producto.id !== id
+        tarjeta.append(
+            crearElemento("h1", paquete.destino, "tipo"),
+            crearElemento("h3", paquete.tipo),
+            crearElemento("p", `País: ${paquete.pais}`),
+            crearElemento("p", `Vuelo: ${servicios.vuelo.clase}`),
+            crearElemento("p", `Hotel: ${servicios.hospedaje.nombre}`),
+            crearElemento("p", servicios.auto?.nombre || "Sin auto"),
+            crearElemento("p", `${paquete.diasEstadia} días, ${paquete.noches} noches de estadía`),
+            crearElemento("small", `Estadía: ${paquete.fechaEntrada} al ${paquete.fechaSalida}`),
+            crearElemento("div", `${precio(centavos(paquete.precioInicial))} ARS`, "precio"),
+            crearElemento("small", "Total inicial para 1 viajero. Personalizá los servicios en el carrito."),
+            crearElemento("small", "Paquete de demostración."),
+            crearBoton("Agregar al carrito", "btn-agregar", () => agregarAlCarrito(paquete))
         );
+        contenedor.append(tarjeta);
+    });
+}
+
+function agregarAlCarrito(paquete) {
+    carrito.push({
+        id: crypto.randomUUID(),
+        paqueteId: paquete.id,
+        viajeros: 1,
+        seleccion: { ...paquete.seleccionInicial }
+    });
+
+    mensajeCarrito.textContent = "";
+    guardarCarrito();
+    mostrarCarrito();
+    carritoElemento.classList.add("abierto");
+}
+
+function crearSelector(item, titulo, campo, opciones, permiteSinAuto) {
+    const etiqueta = crearElemento("label", undefined, "campo-carrito");
+    const selector = document.createElement("select");
+
+    etiqueta.append(crearElemento("span", titulo));
+
+    if (permiteSinAuto) {selector.add(new Option("Sin auto", ""));}
+
+    opciones.forEach((opcion) => {const capacidad = opcion.capacidadPersonas ? ` · hasta ${opcion.capacidadPersonas} personas` : "";
+
+        selector.add(new Option(`${opcion.nombre}${capacidad} · ${precio(centavos(opcion.precioUnitario))}`,
+            opcion.codigo
+        ));
+    });
+
+    selector.value = item.seleccion[campo] ?? "";
+
+    selector.addEventListener("change", () => {
+        item.seleccion[campo] = selector.value || null;
+        mensajeCarrito.textContent = "Selección actualizada.";
+        guardarCarrito();
+        mostrarCarrito();
+    });
+
+    etiqueta.append(selector);
+    return etiqueta;
+}
+
+function mostrarCarrito() {
+    productosCarrito.replaceChildren();
+
+    let total = 0;
+    let viajerosTotales = 0;
+
+    if (!carrito.length) {
+        productosCarrito.append(crearElemento("p", "Tu carrito está vacío.", "precio"));
     }
-    guardarCarrito();
-    mostrarCarrito();
+
+    carrito.forEach((item) => {
+        const paquete = buscarPaquete(item.paqueteId);
+        const calculo = calcular(paquete, item);
+
+        total += calculo.total;
+        viajerosTotales += item.viajeros;
+
+        const personalizado = ["vuelo", "hospedaje", "auto"].some((campo) => item.seleccion[campo] !== paquete.seleccionInicial[campo]);
+
+        const bloque = crearElemento("div", undefined, "producto-carrito");
+
+        bloque.append(crearElemento("h4",`${paquete.destino} · ${paquete.tipo}`,"destinoP"));
+
+        if (personalizado) {
+            bloque.append(crearElemento("p", "Personalizado"));
+        }
+
+        const campoViajeros = crearElemento("label", undefined, "campo-carrito");
+
+        const viajeros = document.createElement("input");
+        viajeros.type = "number";
+        viajeros.min = "1";
+        viajeros.max = "100";
+        viajeros.step = "1";
+        viajeros.value = item.viajeros;
+
+        viajeros.addEventListener("change", () => {
+            const cantidad = Number(viajeros.value);
+
+            if (!Number.isInteger(cantidad) || cantidad < 1 || cantidad > 100) {
+                viajeros.value = item.viajeros;
+                mensajeCarrito.textContent = "Ingresá entre 1 y 100 viajeros.";
+                return;
+            }
+
+            item.viajeros = cantidad;
+            mensajeCarrito.textContent = "Cantidad de viajeros actualizada.";
+            guardarCarrito();
+            mostrarCarrito();
+        });
+
+        campoViajeros.append( crearElemento("span", "Cantidad de viajeros"), viajeros);
+
+        bloque.append(
+            campoViajeros, 
+            crearSelector(item, "Vuelo", "vuelo", paquete.opciones.vuelos, false),
+            crearSelector(item, "Hospedaje", "hospedaje", paquete.opciones.hospedajes, false),
+            crearSelector(item, "Vehículo", "auto", paquete.opciones.autos, paquete.permiteSinAuto),
+            crearElemento("p", `${item.viajeros} pasaje(s): ${precio(calculo.totalVuelos)}`),
+            crearElemento("p", `${calculo.cantidadHospedajes} unidad(es) de hospedaje: ${precio(calculo.totalHospedajes)}`),
+            crearElemento("p", `${calculo.cantidadAutos} vehículo(s): ${precio(calculo.totalAutos)}`)
+        );
+
+        if (calculo.cantidadHospedajes > 1 || calculo.cantidadAutos > 1) {
+            const aviso = crearElemento("p", `Por la capacidad elegida, el grupo necesita ${calculo.cantidadHospedajes} unidad(es) de hospedaje y 
+                ${calculo.cantidadAutos} vehículo(s). El total ya incluye estas cantidades.`, "aviso-capacidad"
+            );
+
+            aviso.setAttribute("role", "status");
+            bloque.append(aviso);
+        }
+
+        bloque.append(
+            crearElemento("strong", `Subtotal: ${precio(calculo.total)} ARS`, "precio"),
+            crearBoton("Eliminar", "eliminar", () => {carrito = carrito.filter((seleccion) => seleccion.id !== item.id);
+                mensajeCarrito.textContent = "";
+                guardarCarrito();
+                mostrarCarrito();
+            })
+        );
+        productosCarrito.append(bloque);
+    });
+
+    totalCarrito.textContent = `${precio(total)} ARS`;
+    cantidadCarrito.textContent = viajerosTotales;
+    cantidadCarrito.title = "Total de viajeros sumados entre las selecciones";
 }
-//Eliminar productos del carrito
-function eliminarDelCarrito(id) {
-    carrito = carrito.filter(
-        producto => producto.id !== id
-    );
-    guardarCarrito();
-    mostrarCarrito();
-}
-//vaciar carrito
+
+inputBusqueda.addEventListener("input", mostrarPaquetes);
+
+document.getElementById("btnCarrito").addEventListener("click", () => {carritoElemento.classList.add("abierto");});
+
+document.getElementById("cerrarCarrito").addEventListener("click", () => {carritoElemento.classList.remove("abierto");});
+
 document.getElementById("vaciarCarrito").addEventListener("click", () => {
     carrito = [];
+    mensajeCarrito.textContent = "";
     guardarCarrito();
     mostrarCarrito();
 });
-//abrir carrito
-document.getElementById("btnCarrito").addEventListener("click", () => {
-    carritoElemento.classList.add("abierto");
-});
-//cerrar carrito
-document.getElementById("cerrarCarrito").addEventListener("click", () =>{
-    carritoElemento.classList.remove("abierto");
-});
-//inicio
-//acá mostramos todos los paquetes disponibles en la página xd (no quiero programar más)
-mostrarPaquetes(paquetes);
-mostrarCarrito();
+
+async function iniciar() {
+    inputBusqueda.disabled = true;
+    contenedor.replaceChildren(crearElemento("p", "Cargando paquetes...", "sin-resultados"));
+
+    try {
+        const respuesta = await fetch("/api/paquetes", {cache: "no-store"});
+
+        if (!respuesta.ok) {throw new Error("No se pudo obtener el catálogo");}
+
+        const datos = await respuesta.json();
+
+        if (!Array.isArray(datos.paquetes)) {throw new Error("Respuesta de catálogo inválida");}
+
+        paquetes = datos.paquetes;
+        recuperarCarrito();
+        mostrarPaquetes();
+        mostrarCarrito();
+        inputBusqueda.disabled = false;
+    } catch (error) {
+        console.error(error);
+
+        contenedor.replaceChildren(
+            crearElemento("p","No se pudieron cargar los paquetes. Recargá la página para reintentar.","sin-resultados")
+        );
+    }
+}
+
+iniciar();
