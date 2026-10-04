@@ -40,6 +40,66 @@ body {
         transform: translateY(0);
     }
 }
+.carrusel{
+    width: 90%;
+    max-width: 1200px;
+    height: 400px;
+    margin: 50px auto;
+    overflow: hidden;
+    border-radius: 20px;
+}
+.carrusel-contenedor{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease;
+}
+.imagen{
+    min-width: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.box-questions {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+summary {
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+}
+
+.contenido {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0;
+    color: white;
+}
+
+.box-questions.abierto .contenido {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    color: white;
+}
+
+.respuestas {
+    overflow: hidden;
+    padding: 0 10px;
+    color: white;
+}
+
+.box-questions.abierto .respuestas {
+    padding: 10px;
+    color: white;
+}
 .box1{
     display: flex;
     flex-direction: column;
