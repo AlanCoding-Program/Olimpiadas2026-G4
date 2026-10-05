@@ -75,7 +75,7 @@ header h1{
 .hotel{
     color: white;
 }
-/*barra*/
+
 .buscador input {
     width: 450px;
     max-width: 90%;
@@ -86,7 +86,7 @@ header h1{
     outline: none;
     font-size: 16px;
 }
-/*comprar boton*/
+
 .btn-carrito{
     position: absolute;
     right: 30px;
@@ -106,20 +106,20 @@ header h1{
     border-radius: 50%;
     margin-left: 5px;
 }
-/*contenido*/
+
 main{
     padding: 40px
 }
 main h2{
     margin-bottom: 25px;
 }
-/*Paquetes*/
+
 .paquetes{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 25px;
 }
-/*Tarjeta*/
+
 .card{
     background: #1b202b;
     border-radius: 15px;
@@ -154,7 +154,7 @@ main h2{
     margin: 20px 0;
     color: #6fc3ff
 }
-/*Botón agregar*/
+
 .btn-agregar{
     width: 100%;
     padding: 13px;
@@ -169,7 +169,7 @@ main h2{
 .btn-agregar:hover{
     background: #9bd8ff;
 }
-/*El carrito*/
+
 .carrito{
     position: fixed;
     right: -400px;
@@ -185,7 +185,7 @@ main h2{
 .carrito.abierto{
     right:0;
 }
-/*header del carrito*/
+
 .carrito-header{
     display: flex;
     justify-content: space-between;
@@ -200,7 +200,7 @@ main h2{
     font-size: 22px;
     cursor: pointer;
 }
-/*Productos*/
+
 .productos-carrito{
     padding: 20px;
     height: calc(100vh - 170px);
@@ -213,7 +213,7 @@ main h2{
     color: #6fc3ff;
     margin-bottom: 10px;
 }
-/*controles*/
+
 .controles{
     display: flex;
     align-items: center;
@@ -226,7 +226,7 @@ main h2{
     border-radius: 5px;
     cursor: pointer;
 }
-/*eliminar*/
+
 .eliminar{
     margin-top: 10px;
     background: #ff4d6d;
@@ -236,7 +236,7 @@ main h2{
     border-radius: 5px;
     cursor: pointer;
 }
-/*Footer*/
+
 .carrito-footer{
     position: absolute;
     bottom: 0;
@@ -423,4 +423,29 @@ main h2{
 
 .mensaje-carrito:empty {
     display: none;
+}
+
+#confirmarPedido {
+    width: 100%;
+    margin: 10px 0;
+}
+
+#confirmarPedido:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.aviso-demostracion {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #cbd5e1;
+}
+
+.mensaje-carrito {
+    overflow-wrap: anywhere;
+}
+
+.carrito-footer {
+    max-height: 50dvh;
+    overflow-y: auto;
 }

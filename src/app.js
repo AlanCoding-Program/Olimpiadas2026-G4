@@ -2,9 +2,12 @@ const express = require("express");
 const path = require("node:path");
 
 const pool = require("./config/database");
+const sessionMiddleware = require("./config/session");
+
 const usuariosRoutes = require("./routes/usuariosRoutes");
 const paquetesRoutes = require("./routes/paquetesRoutes");
-const sessionMiddleware = require("./config/session");
+const pedidosRoutes = require("./routes/pedidosRoutes");
+
 
 const app = express();
 
@@ -22,6 +25,7 @@ app.get("/views/register.html", (req, res) => {
 app.use("/api", sessionMiddleware);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/paquetes", paquetesRoutes);
+app.use("/api/pedidos", pedidosRoutes);
 
 app.get("/", (req, res) => {
     res.json({ mensaje: "Backend de Olimpiadas funcionando" });

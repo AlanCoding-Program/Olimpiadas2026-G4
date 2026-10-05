@@ -17,6 +17,18 @@ const formatoPrecio = new Intl.NumberFormat("es-AR", {
 let paquetes = [];
 let carrito = [];
 
+const botonConfirmar = document.getElementById("confirmarPedido");
+const CLAVE_INTENTO = "pyflight_intento_compra_v1";
+
+let enviandoCompra = false;
+let intentoCompra = null;
+
+try {
+    intentoCompra = JSON.parse(sessionStorage.getItem(CLAVE_INTENTO) || "null");
+} catch {
+    intentoCompra = null;
+}
+
 function precio(centavos) {return formatoPrecio.format(centavos / 100);}
 
 function centavos(valor) {return Math.round(Number(valor) * 100);}
@@ -158,6 +170,7 @@ function mostrarPaquetes() {
         );
         contenedor.append(tarjeta);
     });
+    actualizarControlesCompra();
 }
 
 function agregarAlCarrito(paquete) {
@@ -288,6 +301,8 @@ function mostrarCarrito() {
     totalCarrito.textContent = `${precio(total)} ARS`;
     cantidadCarrito.textContent = viajerosTotales;
     cantidadCarrito.title = "Total de viajeros sumados entre las selecciones";
+
+    actualizarControlesCompra();
 }
 
 inputBusqueda.addEventListener("input", mostrarPaquetes);
@@ -302,6 +317,116 @@ document.getElementById("vaciarCarrito").addEventListener("click", () => {
     guardarCarrito();
     mostrarCarrito();
 });
+
+botonConfirmar.addEventListener("click", confirmarCompra);
+
+function actualizarControlesCompra() {
+    const bloqueado = enviandoCompra || Boolean(intentoCompra);
+
+    document.querySelectorAll(
+        "#productosCarrito input, " + "#productosCarrito select, " + "#productosCarrito button, " + "#contenedorPaquetes button, " + "#vaciarCarrito"
+    ).forEach((control) => {
+        control.disabled = bloqueado;
+    });
+
+    botonConfirmar.disabled = enviandoCompra || (!carrito.length && !intentoCompra);
+
+    botonConfirmar.textContent = enviandoCompra ? "Procesando compra…" : intentoCompra ? "Reintentar confirmación" : "Confirmar compra";
+}
+
+function borrarIntentoCompra() {
+    sessionStorage.removeItem(CLAVE_INTENTO);
+    intentoCompra = null;
+}
+
+async function confirmarCompra() {
+    if (enviandoCompra || (!carrito.length && !intentoCompra)) {
+        return;
+    }
+
+    if (!intentoCompra) {
+        const total = carrito.reduce((acumulado, item) => {
+            const paquete = buscarPaquete(item.paqueteId);
+            return acumulado + calcular(paquete, item).total;
+        }, 0);
+
+        const acepta = window.confirm(`¿Confirmar la compra por ${precio(total)} ARS?`);
+
+        if (!acepta) return;
+
+        const nuevoIntento = {
+            clave: crypto.randomUUID(),
+
+            items: carrito.map((item) => ({paqueteId: item.paqueteId, viajeros: item.viajeros, seleccion: { ...item.seleccion }})),
+
+            totalEsperadoCentavos: total
+        };
+
+        try {
+            sessionStorage.setItem(CLAVE_INTENTO, JSON.stringify(nuevoIntento));
+            intentoCompra = nuevoIntento;
+        } catch {
+            mensajeCarrito.textContent ="Habilitá el almacenamiento del navegador para confirmar la compra.";
+            return;
+        }
+    }
+
+    enviandoCompra = true;
+    actualizarControlesCompra();
+
+    mensajeCarrito.textContent ="Guardando la compra y enviando el comprobante…";
+
+    try {
+        const respuesta = await fetch("/api/pedidos", {
+            method: "POST",
+            credentials: "same-origin",
+
+            headers: {"Content-Type": "application/json"},
+
+            body: JSON.stringify(intentoCompra),
+
+            signal: AbortSignal.timeout(45000)
+        });
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+            if ([400, 401, 409, 415, 422, 429].includes(respuesta.status)) {
+                borrarIntentoCompra();
+            }
+
+            if (respuesta.status === 401) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            throw new Error(datos.mensaje || "No se pudo confirmar la compra.");
+        }
+
+        if (!datos.pedido?.numero_pedido) {throw new Error("La respuesta del servidor no es válida.");}
+
+        localStorage.removeItem(CLAVE_CARRITO);
+        borrarIntentoCompra();
+
+        carrito = [];
+        mostrarCarrito();
+
+        const numeroComprobante = datos.factura?.numero_factura || datos.pedido.numero_pedido;
+
+        const estado = datos.pedido.nombre_estado.replaceAll("_", " ");
+
+        const avisoCorreo = datos.correo === "enviado" ? "El servicio de correo aceptó el envío del comprobante." : "El correo no está confirmado. La compra permanece guardada.";
+
+        mensajeCarrito.textContent =`Pedido registrado. Comprobante: ${numeroComprobante}. ` + `Estado: ${estado}. ` + `Total: ${formatoPrecio.format(Number(datos.pedido.monto_total))} ARS. ${avisoCorreo}`;
+
+    } catch (error) {
+        mensajeCarrito.textContent = intentoCompra ? "No pudimos confirmar el resultado. Pulsá Reintentar confirmación para recuperar el mismo pedido sin duplicarlo." : error.message;
+
+    } finally {
+        enviandoCompra = false;
+        actualizarControlesCompra();
+    }
+}
 
 async function iniciar() {
     inputBusqueda.disabled = true;
@@ -321,6 +446,10 @@ async function iniciar() {
         mostrarPaquetes();
         mostrarCarrito();
         inputBusqueda.disabled = false;
+        if (intentoCompra) {
+            mensajeCarrito.textContent ="Hay una confirmación sin resolver. Pulsá Reintentar confirmación para consultar el resultado.";
+            carritoElemento.classList.add("abierto");
+        }
     } catch (error) {
         console.error(error);
 
