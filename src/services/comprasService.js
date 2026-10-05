@@ -44,7 +44,7 @@ async function confirmarCompra(datos) {
 
         try {
             await pool.query(
-                `UPDATE log_notificaciones SET estado_envio = $1: :varchar(20),
+                `UPDATE log_notificaciones SET estado_envio = $1::varchar(20),
                   fecha_envio = CASE WHEN $1::varchar(20) = 'enviado' THEN CURRENT_TIMESTAMP ELSE NULL
                   END WHERE id_log = $2::integer`,
                 [estadoCorreo, resultado.idLog]

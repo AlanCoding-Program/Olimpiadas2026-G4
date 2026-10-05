@@ -11,6 +11,9 @@ const pedidosRoutes = require("./routes/pedidosRoutes");
 
 const app = express();
 
+
+if (process.env.NODE_ENV === "production") { app.set("trust proxy", 1); }
+
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: false, limit: "10kb" }));
 
