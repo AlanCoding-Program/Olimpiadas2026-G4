@@ -1,5 +1,6 @@
 const { createHash } = require("node:crypto");
 const pool = require("../config/database");
+const { listarPaquetes } = require("./paquetesService");
 
 const {
     validarCarrito,
@@ -9,7 +10,8 @@ const {
 } = require("./pedidoCalculo");
 
 async function prepararPedido(db, items, totalEsperadoCentavos) {
-    const carritoValidado = validarCarrito(items);
+    const paquetes = await listarPaquetes(db);
+    const carritoValidado = validarCarrito(items, paquetes);
 
     if (!Number.isSafeInteger(totalEsperadoCentavos) || totalEsperadoCentavos < 0) {
         throw errorPedido("El total esperado no es válido.");

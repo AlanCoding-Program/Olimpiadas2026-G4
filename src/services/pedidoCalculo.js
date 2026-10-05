@@ -1,12 +1,10 @@
-const paquetes = require("../config/paquetes");
-
 function errorPedido(mensaje, status = 400) {
     const error = new Error(mensaje);
     error.status = status;
     return error;
 }
 
-function validarCarrito(items) {
+function validarCarrito(items, paquetes) {
     if (!Array.isArray(items) || items.length < 1 || items.length > 20) {
         throw errorPedido("El carrito debe contener entre 1 y 20 selecciones.");
     }

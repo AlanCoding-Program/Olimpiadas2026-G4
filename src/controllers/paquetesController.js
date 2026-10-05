@@ -1,10 +1,12 @@
 const pool = require("../config/database");
-const paquetes = require("../config/paquetes");
+const { listarPaquetes } = require("../services/paquetesService");
 
 async function obtenerPaquetes(req, res) {
     res.set("Cache-Control", "no-store");
 
     try {
+        const paquetes = await listarPaquetes();
+        
         const codigos = [...new Set(paquetes.flatMap((paquete) => [
             ...paquete.opciones.vuelos,
             ...paquete.opciones.hospedajes,
