@@ -1,4 +1,5 @@
 const logoutButton = document.getElementById("logoutButton");
+const adminButton = document.getElementById("adminButton");
 
 if (logoutButton) {
     comprobarSesion();
@@ -30,14 +31,25 @@ if (logoutButton) {
 }
 
 async function comprobarSesion() {
+    if (adminButton) adminButton.hidden = true;
+
     try {
         const respuesta = await fetch("/api/usuarios/sesion", {
-            credentials: "same-origin", 
+            credentials: "same-origin",
             cache: "no-store"
         });
 
         logoutButton.hidden = !respuesta.ok;
+
+        if (!respuesta.ok) return;
+
+        const datos = await respuesta.json();
+
+        if (adminButton) {
+            adminButton.hidden = datos.usuario?.es_admin !== true;
+        }
     } catch (error) {
         logoutButton.hidden = true;
+        if (adminButton) adminButton.hidden = true;
     }
 }

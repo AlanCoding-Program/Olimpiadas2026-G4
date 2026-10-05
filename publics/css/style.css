@@ -147,3 +147,7 @@ summary {
      .respuestas { font-size: 13px; } 
      .redirect { font-size: 16px; } 
 }
+
+#adminButton[hidden] {
+    display: none !important;
+}
