@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <link rel="stylesheet" href="../publics/css/admin.css">
     <meta charset="UTF-8">
@@ -9,69 +9,29 @@
 <body>
     <section>
         <h2>Panel de Admin.</h2>
-        <p>
-            Creá, modificá o eliminá los paquetes de viajes disponibles.
-        </p>
+        <p>Creá, modificá o eliminá los paquetes de viajes disponibles.</p>
     </section>
     <!--formulario.-->
     <section class="panel">
-        <div class="panel-tiulo">
-            <h3 id="tituloFormulario">
-                Crear nuevo paquete
-            </h3>
-            <button
-                type="button"
-                id="btnCancelar"
-                class="btn-cancelar oculto">
-                Cancelar edición
-            </button>
+        <div class="panel-titulo">
+            <h3 id="tituloFormulario">Crear nuevo paquete</h3>
+            <button type="button" id="btnCancelar" class="btn-cancelar oculto">Cancelar edición</button>
         </div>
         <form id="formPaquete">
             <div class="form-grid">
                 <!--Destino-->
                 <div class="campo">
-                    <label for="desino">
-                        Destino
-                    </label>
-                    <input 
-                        type="text"
-                        id="destino"
-                        placeholder="EJ: Miami"
-                        required>
+                    <label for="tipo">Tipo</label>
+                    <select id="tipo" required>
+                        <option value="">Seleccione una opción</option>
+                        <option value="Económico">Económico</option>
+                        <option value="Intermedio">Intermedio</option>
+                        <option value="All Inclusive">All Inclusive</option>
+                    </select>
                 </div>
-                <!--Pais-->
-                <div class="campo">
-                    <label for="pais">
-                        País
-                    </label>
-
-                    <input 
-                        type="text"
-                        id="pais"
-                        placeholder="EJ: Estados Unidos"
-                        required>
-                </div>
-                <!--Tipo-->
-                <div class="campo">
-                    <label for="tipo">
-                        Tipo
-                    </label>
-                    <select name="" id="">
-                    <option value="" required placeholder="Seleccione una opción">
-                        <option value="Económico">
-                            Económico
-                        </option>
-                        <option value="Intermedio">
-                            Intermedio
-                        </option>
-                        <option value="All Inclusive">
-                            All Inclusive
-                        </option>
-                    </option>
-                </select>
                 <!--Precio-->
                 <div class="campo">
-                    <label for="precioFinal">
+                    <label for="precioInicial">
                         Precio inicial
                     </label>
                     <input 
@@ -126,7 +86,16 @@
                         id="fechaSalida"
                         required>
                 </div>
-        </div>
+            </div>
+            <div class="campo">
+                <label for="destino">Destino</label>
+                <input type="text" id="destino" placeholder="Ej: Miami" required>
+            </div>
+            
+            <div class="campo">
+                <label for="pais">País</label>
+                <input type="text" id="pais" placeholder="Ej: Estados Unidos" required>
+            </div>
         <!--Opciones-->
         <div class="opciones">
             <h4>Opciones de paquete</h4>
@@ -220,9 +189,7 @@
         </div>
     </section>
     <!--Modal eliminar-->
-    <div
-        id="modalEliminar"
-        class="modal-oculto">
+    <div id="modalEliminar" class="modal oculto">
 
         <div class="modal-contenido">
             <h3>Eliminar paquete</h3>
@@ -246,7 +213,7 @@
         </div>
     </div>
     <div
-        id="Mensaje"
+        id="mensaje"
         class="mensaje">
     </div>
     <script src="../publics/js/admin.js"></script>
