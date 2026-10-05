@@ -1,784 +1,450 @@
-const formPaquete = document.getElementById("formPaquete");
-const listaPaquetes = document.getElementById("listaPaquetes");
-const buscarPaquete = document.getElementById("buscarPaquete");
-const cantidadPaquetes = document.getElementById("cantidadPaquetes");
-const tituloFormulario = document.getElementById("tituloFormulario");
-const btnGuardar = document.getElementById("btnGuardar");
-const btnCancelar = document.getElementById("btnCancelar");
-const btnAgregarVuelo = document.getElementById("btnAgregarVuelo");
-const btnAgregarHospedaje = document.getElementById("btnAgregarHospedaje");
-const btnAgregarAuto = document.getElementById("btnAgregarAuto");
-const vuelosContainer = document.getElementById("vuelosContainer");
-const hospedajesContainer = document.getElementById("hospedajesContainer");
-const autosContainer = document.getElementById("autosContainer");
-const modalEliminar = document.getElementById("modalEliminar");
-const mensajeEliminar = document.getElementById("mensajeEliminar");
-const btnCancelarEliminar =
-    document.getElementById("btnCancelarEliminar");
-const btnConfirmarEliminar =
-    document.getElementById("btnConfirmarEliminar");
-const mensaje = document.getElementById("mensaje");
-/*DATOS */
-const CLAVE_PAQUETES = "pyflight_paquetes_admin";
+const porId = (id) => document.getElementById(id);
+
+const form = porId("formPaquete");
+const lista = porId("listaPaquetes");
+const buscador = porId("buscarPaquete");
+const mensaje = porId("mensaje");
+const modal = porId("modalEliminar");
+
+const grupos = {
+    vuelos: porId("vuelosContainer"),
+    hospedajes: porId("hospedajesContainer"),
+    autos: porId("autosContainer")
+};
 
 let paquetes = [];
-let paqueteEditando = null;
-let paqueteEliminar = null;
+let editando = null;
+let eliminando = null;
+let ocupado = false;
+let autorizado = false;
+let temporizador;
 
+function avisar(texto) {
+    clearTimeout(temporizador);
+    mensaje.textContent = texto;
+    mensaje.classList.add("mostrar");
 
-/*PAQUETES DE EJEMPLO*/
-const paquetesIniciales = [
-    {
-        id: crypto.randomUUID(),
-        destino: "Miami",
-        pais: "Estados Unidos",
-        tipo: "Económico",
-        diasEstadia: 7,
-        noches: 6,
-        fechaEntrada: "2026-11-10",
-        fechaSalida: "2026-11-17",
-        precioInicial: 500000,
-        permiteSinAuto: true,
-        opciones: {
-            vuelos: [
-                {
-                    codigo: "MIAMI-ECO",
-                    clase: "Clase económica",
-                    nombre: "Vuelo económico",
-                    precioUnitario: 150000,
-                    capacidadPersonas: 1
-                }
-            ],
-            hospedajes: [
-                {
-                    codigo: "MIAMI-HOTEL",
-                    nombre: "Hotel Miami Beach",
-                    precioUnitario: 180000,
-                    capacidadPersonas: 2
-                }
-            ],
-            autos: [
-                {
-                    codigo: "MIAMI-AUTO",
-                    nombre: "Auto económico",
-                    precioUnitario: 120000,
-                    capacidadPersonas: 4
-                }
-            ]
-        },
-        seleccionInicial: {
-            vuelo: "MIAMI-ECO",
-            hospedaje: "MIAMI-HOTEL",
-            auto: "MIAMI-AUTO"
-        }
-    },
-    {
-        id: crypto.randomUUID(),
-        destino: "París",
-        pais: "Francia",
-        tipo: "All Inclusive",
-        diasEstadia: 7,
-        noches: 6,
-        fechaEntrada: "2026-12-01",
-        fechaSalida: "2026-12-08",
-        precioInicial: 850000,
-        permiteSinAuto: true,
-        opciones: {
-            vuelos: [
-                {
-                    codigo: "PARIS-ALL",
-                    clase: "Primera clase",
-                    nombre: "Vuelo París Premium",
-                    precioUnitario: 350000,
-                    capacidadPersonas: 1
-                }
-            ],
-            hospedajes: [
-                {
-                    codigo: "PARIS-HOTEL",
-                    nombre: "Hotel Paris Luxury",
-                    precioUnitario: 350000,
-                    capacidadPersonas: 2
-                }
-            ],
-            autos: [
-                {
-                    codigo: "PARIS-AUTO",
-                    nombre: "BMW X6",
-                    precioUnitario: 150000,
-                    capacidadPersonas: 5
-                }
-            ]
-        },
-        seleccionInicial: {
-            vuelo: "PARIS-ALL",
-            hospedaje: "PARIS-HOTEL",
-            auto: "PARIS-AUTO"
-        }
-    }
-];
-/*DESTINOS */
-function iniciar() {
-    cargarPaquetes();
-    limpiarFormulario();
-    mostrarPaquetes();
+    temporizador = setTimeout(() => {
+        mensaje.classList.remove("mostrar");
+    }, 8000);
 }
-/*LOCAL STORAGE */
-function cargarPaquetes() {
-    try {
-        const guardados =
-            JSON.parse(
-                localStorage.getItem(CLAVE_PAQUETES)
-            );
-        if (Array.isArray(guardados)) {
-            paquetes = guardados;
+
+function bloquear(valor) {
+    ocupado = valor;
+
+    document.querySelectorAll("button, input, select").forEach((control) => {
+        control.disabled = valor || !autorizado;
+    });
+}
+
+async function api(ruta, opciones = {}) {
+    const respuesta = await fetch(`/api/admin${ruta}`, {
+        ...opciones,
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: {
+            "Content-Type": "application/json",
+            ...opciones.headers
+        }
+    });
+
+    const datos = await respuesta.json().catch(() => ({}));
+
+    if (respuesta.status === 401) {
+        window.location.href = "login.html";
+        throw new Error("Iniciá sesión.");
+    }
+
+    if (respuesta.status === 403) {
+        autorizado = false;
+        throw new Error("Tu cuenta no tiene permisos de administrador.");
+    }
+
+    if (!respuesta.ok) {
+        throw new Error(datos.mensaje || "No se pudo completar la operación.");
+    }
+
+    return datos;
+}
+
+function elemento(etiqueta, texto, clase) {
+    const nodo = document.createElement(etiqueta);
+    if (texto !== undefined) nodo.textContent = texto;
+    if (clase) nodo.className = clase;
+    return nodo;
+}
+
+function precio(valor) {
+    return new Intl.NumberFormat("es-AR", {
+        style: "currency",
+        currency: "ARS"
+    }).format(valor);
+}
+
+function agregarServicio(grupo, datos = {}) {
+    const fila = elemento("div", undefined, "servicio");
+    fila.dataset.grupo = grupo;
+
+    function campo(titulo, nombre, valor, tipo = "text") {
+        const contenedor = elemento("label", undefined, "campo");
+        contenedor.append(elemento("span", titulo));
+
+        const input = document.createElement("input");
+        input.className = `servicio-${nombre}`;
+        input.type = tipo;
+        input.value = valor ?? "";
+        input.required = true;
+
+        if (tipo === "number") {
+            input.min = nombre === "capacidad" ? "1" : "0";
+            input.step = nombre === "capacidad" ? "1" : "0.01";
+        }
+
+        contenedor.append(input);
+        fila.append(contenedor);
+    }
+
+    campo("Código", "codigo", datos.codigo);
+    campo("Nombre", "nombre", datos.nombre);
+    campo("Precio ARS", "precio", datos.precioUnitario, "number");
+
+    if (grupo === "vuelos") {
+        campo("Clase", "clase", datos.clase);
+    } else {
+        campo("Capacidad", "capacidad", datos.capacidadPersonas, "number");
+    }
+
+    const quitar = elemento("button", "Quitar opción", "btn-remover");
+    quitar.type = "button";
+
+    quitar.addEventListener("click", () => {
+        fila.remove();
+        actualizarResumen();
+    });
+
+    fila.append(quitar);
+    grupos[grupo].append(fila);
+}
+
+function leerServicios(grupo) {
+    return [...grupos[grupo].querySelectorAll(".servicio")].map((fila) => {
+        const valor = (nombre) =>
+            fila.querySelector(`.servicio-${nombre}`)?.value.trim();
+
+        return {
+            codigo: valor("codigo"),
+            nombre: valor("nombre"),
+            precioUnitario: Number(valor("precio")),
+            capacidadPersonas: grupo === "vuelos"
+                ? 1
+                : Number(valor("capacidad")),
+            ...(grupo === "vuelos" ? { clase: valor("clase") } : {})
+        };
+    });
+}
+
+function seleccionInicial(opciones) {
+    const resultado = {};
+
+    for (const [campo, grupo] of [
+        ["vuelo", "vuelos"],
+        ["hospedaje", "hospedajes"],
+        ["auto", "autos"]
+    ]) {
+        const anterior = editando?.seleccionInicial?.[campo];
+
+        if (
+            campo === "auto" &&
+            anterior === null &&
+            porId("permiteSinAuto").checked
+        ) {
+            resultado[campo] = null;
         } else {
-            paquetes = paquetesIniciales;
-            guardarPaquetes();
+            resultado[campo] =
+                opciones[grupo].find((item) => item.codigo === anterior)?.codigo
+                || opciones[grupo][0]?.codigo
+                || null;
         }
-    } catch {
-        paquetes = paquetesIniciales;
-        guardarPaquetes();
     }
-}
-function guardarPaquetes() {
-    localStorage.setItem(
-        CLAVE_PAQUETES,
-        JSON.stringify(paquetes)
-    );
-}
-/*FORMULARIO */
-function obtenerDatosFormulario() {
-    const destino =
-        document.getElementById("destino").value.trim();
-    const pais =
-        document.getElementById("pais").value.trim();
-    const tipo =
-        document.getElementById("tipo").value;
-    const precioInicial =
-        Number(
-            document.getElementById("precioInicial").value
-        );
-    const diasEstadia =
-        Number(
-            document.getElementById("diasEstadia").value
-        );
-    const noches =
-        Number(
-            document.getElementById("noches").value
-        );
-    const fechaEntrada =
-        document.getElementById("fechaEntrada").value;
-    const fechaSalida =
-        document.getElementById("fechaSalida").value;
-    const permiteSinAuto =
-        document.getElementById("permiteSinAuto").checked;
-    const vuelos =
-        obtenerServicios(vuelosContainer);
-    const hospedajes =
-        obtenerServicios(hospedajesContainer);
-    const autos =
-        obtenerServicios(autosContainer);
-    return {
-        id:
-            paqueteEditando
-                ? paqueteEditando.id
-                : crypto.randomUUID(),
 
-        destino,
-        pais,
-        tipo,
-        diasEstadia,
-        noches,
-        fechaEntrada,
-        fechaSalida,
-        precioInicial,
-        permiteSinAuto,
-        opciones: {
-            vuelos,
-            hospedajes,
-            autos
-        },
-        seleccionInicial: {
-            vuelo:
-                vuelos[0]?.codigo || null,
-            hospedaje:
-                hospedajes[0]?.codigo || null,
-            auto:
-                autos[0]?.codigo || null
-        }
+    return resultado;
+}
+
+function obtenerDatos() {
+    const opciones = {
+        vuelos: leerServicios("vuelos"),
+        hospedajes: leerServicios("hospedajes"),
+        autos: leerServicios("autos")
+    };
+
+    return {
+        destino: porId("destino").value.trim(),
+        pais: porId("pais").value.trim(),
+        origen: editando?.origen || "Buenos Aires",
+        tipo: porId("tipo").value,
+        fechaEntrada: porId("fechaEntrada").value,
+        fechaSalida: porId("fechaSalida").value,
+        permiteSinAuto: porId("permiteSinAuto").checked,
+        opciones,
+        seleccionInicial: seleccionInicial(opciones)
     };
 }
-/*Servicios */
-function obtenerServicios(container) {
-    const elementos =
-        container.querySelectorAll(".servicio");
-    return [...elementos].map((elemento) => {
-        const codigo =
-            elemento.querySelector(".servicio-codigo").value.trim();
-        const nombre =
-            elemento.querySelector(".servicio-nombre").value.trim();
-        const precio =
-            Number(
-                elemento.querySelector(".servicio-precio").value
-            );
-        const capacidad =
-            Number(
-                elemento.querySelector(".servicio-capacidad").value
-            );
-        const claseInput =
-            elemento.querySelector(".servicio-clase");
-        const clase =
-            claseInput
-                ? claseInput.value.trim()
-                : undefined;
-        const servicio = {
-            codigo,
-            nombre,
-            precioUnitario: precio,
-            capacidadPersonas: capacidad
-        };
-        if (claseInput) {
-            servicio.clase = clase;
-        }
-        return servicio;
-    });
-}
-/*Agregar vuelo */
-btnAgregarVuelo.addEventListener(
-    "click",
-    () => {
-        crearServicio(
-            vuelosContainer,
-            "vuelo"
-        );
-    }
-);
-/*Agregar Hospedaje */
-btnAgregarHospedaje.addEventListener(
-    "click",
-    () => {
-        crearServicio(
-            hospedajesContainer,
-            "hospedaje"
-        );
-    }
-);
-/*Agregar Auto */
-btnAgregarAuto.addEventListener(
-    "click",
-    () => {
-        crearServicio(
-            autosContainer,
-            "auto"
-        );
-    }
-);
-/*Crear servicio */
-function crearServicio(
-    container,
-    tipo,
-    datos = null
-) {
-    const bloque =
-        document.createElement("div");
-    bloque.className = "servicio";
-    const codigo =
-        crearCampoServicio(
-            "Código",
-            "servicio-codigo",
-            datos?.codigo || ""
-        );
-    const nombre =
-        crearCampoServicio(
-            "Nombre",
-            "servicio-nombre",
-            datos?.nombre || ""
-        );
-    const precio =
-        crearCampoServicio(
-            "Precio",
-            "servicio-precio",
-            datos?.precioUnitario ?? "",
-            "number"
-        );
-    const capacidad =
-        crearCampoServicio(
-            "Capacidad",
-            "servicio-capacidad",
-            datos?.capacidadPersonas ?? "",
-            "number"
-        );
-    bloque.append(
-        codigo,
-        nombre,
-        precio,
-        capacidad
-    );
-    /*Solo los vuelos tienen clase */
-    if (tipo === "vuelo") {
-        const clase =
-            crearCampoServicio(
-                "Clase",
-                "servicio-clase",
-                datos?.clase || ""
-            );
-        bloque.insertBefore(
-            clase,
-            bloque.lastElementChild
-        );
-    }
-    const boton =
-        document.createElement("button");
-    boton.type = "button";
-    boton.className = "btn-remover";
-    boton.textContent = "Eliminar";
-    boton.addEventListener(
-        "click",
-        () => bloque.remove()
-    );
-    bloque.append(boton);
-    container.append(bloque);
-}
-function crearCampoServicio(
-    labelTexto,
-    clase,
-    valor,
-    tipo = "text"
-) {
-    const contenedor =
-        document.createElement("div");
 
-    contenedor.className = "campo";
-    const label =
-        document.createElement("label");
+function actualizarResumen() {
+    const datos = obtenerDatos();
+    let totalCentavos = 0;
 
-    label.textContent = labelTexto;
-    const input =
-        document.createElement("input");
-
-    input.type = tipo;
-    input.className = clase;
-    input.value = valor;
-    if (tipo === "number") {
-        input.min = "0";
-        input.step = "0.01";
-    }
-    contenedor.append(
-        label,
-        input
-    );
-    return contenedor;
-}
-/*Guardar Paquete */
-formPaquete.addEventListener(
-    "submit",
-    (evento) => {
-        evento.preventDefault();
-        const paquete =
-            obtenerDatosFormulario();
-        if (
-            !paquete.destino ||
-            !paquete.pais ||
-            !paquete.tipo
-        ) {
-            mostrarMensaje(
-                "Completá todos los campos obligatorios."
-            );
-            return;
-        }
-        if (
-            paquete.diasEstadia < 1 ||
-            paquete.noches < 0
-        ) {
-            mostrarMensaje(
-                "La cantidad de días o noches no es válida."
-            );
-            return;
-        }
-        if (
-            paquete.fechaSalida &&
-            paquete.fechaEntrada &&
-            paquete.fechaSalida < paquete.fechaEntrada
-        ) {
-            mostrarMensaje(
-                "La fecha de salida no puede ser anterior a la entrada."
-            );
-            return;
-        }
-        if (paqueteEditando) {
-            const indice =
-                paquetes.findIndex(
-                    (item) =>
-                        item.id === paqueteEditando.id
-                );
-            if (indice !== -1) {
-                paquetes[indice] = paquete;
-                mostrarMensaje(
-                    "Paquete modificado correctamente."
-                );
-            }
-        } else {
-            paquetes.push(paquete);
-            mostrarMensaje(
-                "Paquete creado correctamente."
-            );
-        }
-        guardarPaquetes();
-        limpiarFormulario();
-        mostrarPaquetes();
-    }
-);
-/*Editar */
-function editarPaquete(id) {
-    const paquete =
-        paquetes.find(
-            (item) => item.id === id
+    for (const [campo, grupo] of [
+        ["vuelo", "vuelos"],
+        ["hospedaje", "hospedajes"],
+        ["auto", "autos"]
+    ]) {
+        const seleccionado = datos.opciones[grupo].find(
+            (item) => item.codigo === datos.seleccionInicial[campo]
         );
-    if (!paquete) return;
-    paqueteEditando = paquete;
-    document.getElementById("destino").value =
-        paquete.destino;
-    document.getElementById("pais").value =
-        paquete.pais;
-    document.getElementById("tipo").value =
-        paquete.tipo;
-    document.getElementById("precioInicial").value =
-        paquete.precioInicial;
-    document.getElementById("diasEstadia").value =
-        paquete.diasEstadia;
-    document.getElementById("noches").value =
-        paquete.noches;
-    document.getElementById("fechaEntrada").value =
-        paquete.fechaEntrada;
-    document.getElementById("fechaSalida").value =
-        paquete.fechaSalida;
-    document.getElementById("permiteSinAuto").checked =
-        paquete.permiteSinAuto;
-    vuelosContainer.replaceChildren();
-    hospedajesContainer.replaceChildren();
-    autosContainer.replaceChildren();
-    paquete.opciones?.vuelos?.forEach(
-        (vuelo) => {
-            crearServicio(
-                vuelosContainer,
-                "vuelo",
-                vuelo
-            );
+
+        if (seleccionado && Number.isFinite(seleccionado.precioUnitario)) {
+            totalCentavos += Math.round(seleccionado.precioUnitario * 100);
         }
-    );
-    paquete.opciones?.hospedajes?.forEach(
-        (hospedaje) => {
-            crearServicio(
-                hospedajesContainer,
-                "hospedaje",
-                hospedaje
-            );
-        }
-    );
-    paquete.opciones?.autos?.forEach(
-        (auto) => {
-            crearServicio(
-                autosContainer,
-                "auto",
-                auto
-            );
-        }
-    );
-    tituloFormulario.textContent =
-        "Modificar paquete";
-    btnGuardar.textContent =
-        "Guardar cambios";
-    btnCancelar.classList.remove(
-        "oculto"
-    );
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-/*Cancelar edición*/
-btnCancelar.addEventListener(
-    "click",
-    () => {
-        limpiarFormulario();
     }
-);
-/*Limpiar Formulario */
+
+    porId("precioInicial").value = (totalCentavos / 100).toFixed(2);
+
+    const entrada = new Date(`${datos.fechaEntrada}T12:00:00Z`);
+    const salida = new Date(`${datos.fechaSalida}T12:00:00Z`);
+    const noches = Math.round((salida - entrada) / 86400000);
+
+    porId("noches").value = noches > 0 ? noches : "";
+    porId("diasEstadia").value = noches > 0 ? noches + 1 : "";
+}
+
 function limpiarFormulario() {
-    formPaquete.reset();
-    paqueteEditando = null;
-    tituloFormulario.textContent =
-        "Crear nuevo paquete";
-    btnGuardar.textContent =
-        "Crear paquete";
-    btnCancelar.classList.add(
-        "oculto"
-    );
-    vuelosContainer.replaceChildren();
-    hospedajesContainer.replaceChildren();
-    autosContainer.replaceChildren();
-    /*Agregamos un servicio vacío */
-    crearServicio(
-        vuelosContainer,
-        "vuelo"
-    );
-    crearServicio(
-        hospedajesContainer,
-        "hospedaje"
-    );
-    crearServicio(
-        autosContainer,
-        "auto"
-    );
-    document.getElementById(
-        "permiteSinAuto"
-    ).checked = true;
+    form.reset();
+    editando = null;
+
+    Object.values(grupos).forEach((contenedor) => {
+        contenedor.replaceChildren();
+    });
+
+    agregarServicio("vuelos");
+    agregarServicio("hospedajes");
+
+    porId("permiteSinAuto").checked = true;
+    porId("tituloFormulario").textContent = "Crear nuevo paquete";
+    porId("btnGuardar").textContent = "Crear paquete";
+    porId("btnCancelar").classList.add("oculto");
+
+    actualizarResumen();
 }
-/*Eliminar */
-function eliminarPaquete(id) {
-    const paquete =
-        paquetes.find(
-            (item) => item.id === id
-        );
-    if (!paquete) return;
-    paqueteEliminar = paquete;
-    mensajeEliminar.textContent =
-        `¿Seguro que querés eliminar el paquete de ${paquete.destino}?`;
-    modalEliminar.classList.remove(
-        "oculto"
-    );
-}
-/*Confirmar eliminación */
-btnConfirmarEliminar.addEventListener(
-    "click",
-    () => {
-        if (!paqueteEliminar) return;
-        paquetes =
-            paquetes.filter(
-                (item) =>
-                    item.id !== paqueteEliminar.id
-            );
-        guardarPaquetes();
-        mostrarPaquetes();
-        mostrarMensaje(
-            "Paquete eliminado correctamente."
-        );
-        cerrarModalEliminar();
+
+function editarPaquete(paquete) {
+    if (ocupado) return;
+
+    limpiarFormulario();
+    editando = paquete;
+
+    for (const campo of [
+        "destino", "pais", "tipo", "fechaEntrada", "fechaSalida"
+    ]) {
+        porId(campo).value = paquete[campo];
     }
-);
-/*Cancelar eliminación */
-btnCancelarEliminar.addEventListener(
-    "click",
-    cerrarModalEliminar
-);
-function cerrarModalEliminar() {
-    paqueteEliminar = null;
-    modalEliminar.classList.add(
-        "oculto"
-    );
+
+    porId("permiteSinAuto").checked = paquete.permiteSinAuto;
+
+    for (const grupo of Object.keys(grupos)) {
+        grupos[grupo].replaceChildren();
+
+        for (const servicio of paquete.opciones[grupo]) {
+            agregarServicio(grupo, servicio);
+        }
+    }
+
+    porId("tituloFormulario").textContent = "Modificar paquete";
+    porId("btnGuardar").textContent = "Guardar cambios";
+    porId("btnCancelar").classList.remove("oculto");
+
+    actualizarResumen();
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
-/*Mostrar paquetes */
+
 function mostrarPaquetes() {
-    const texto =
-        buscarPaquete.value
-            .trim()
-            .toLocaleLowerCase("es");
-    const filtrados =
-        paquetes.filter(
-            (paquete) => {
-                const contenido =
-                    `${paquete.destino}
-                     ${paquete.pais}
-                     ${paquete.tipo}`
-                        .toLocaleLowerCase("es");
-                return contenido.includes(texto);
-            }
-        );
-    listaPaquetes.replaceChildren();
-    cantidadPaquetes.textContent =
-        `${paquetes.length} ${
-            paquetes.length === 1
-                ? "paquete"
-                : "paquetes"
-        }`;
+    const texto = buscador.value.trim().toLocaleLowerCase("es");
+
+    const filtrados = paquetes.filter((paquete) =>
+        `${paquete.destino} ${paquete.pais} ${paquete.tipo}`
+            .toLocaleLowerCase("es")
+            .includes(texto)
+    );
+
+    lista.replaceChildren();
+    porId("cantidadPaquetes").textContent = `${paquetes.length} paquetes`;
+
     if (!filtrados.length) {
-        const mensaje =
-            document.createElement("p");
-        mensaje.className =
-            "sin-resultados";
-        mensaje.textContent =
-            "No se encontraron paquetes.";
-        listaPaquetes.append(mensaje);
+        lista.append(elemento("p", "No hay paquetes para mostrar.", "sin-resultados"));
         return;
     }
-    filtrados.forEach(
-        (paquete) => {
-            listaPaquetes.append(
-                crearTarjetaPaquete(paquete)
-            );
-        }
-    );
-}
-/*Crear tarjeta */
-function crearTarjetaPaquete(paquete) {
-    const tarjeta =
-        document.createElement("article");
-    tarjeta.className =
-        "paquete-card";
-    const arriba =
-        document.createElement("div");
-    arriba.className =
-        "paquete-arriba";
-    const titulo =
-        document.createElement("h4");
-    titulo.textContent =
-        paquete.destino;
-    const tipo =
-        document.createElement("span");
-    tipo.className =
-        "tipo";
-    tipo.textContent =
-        paquete.tipo;
-    arriba.append(
-        titulo,
-        tipo
-    );
-    const informacion =
-        document.createElement("div");
-    informacion.className =
-        "paquete-info";
-    informacion.append(
-        crearInfo(
-            "País",
-            paquete.pais
-        ),
-        crearInfo(
-            "Duración",
-            `${paquete.diasEstadia} días / ${paquete.noches} noches`
-        ),
-        crearInfo(
-            "Entrada",
-            formatearFecha(
-                paquete.fechaEntrada
-            )
-        ),
-        crearInfo(
-            "Salida",
-            formatearFecha(
-                paquete.fechaSalida
-            )
-        )
-    );
-    const precio =
-        document.createElement("div");
-    precio.className =
-        "precio";
-    precio.textContent =
-        formatearPrecio(
-            paquete.precioInicial
+
+    for (const paquete of filtrados) {
+        const tarjeta = elemento("article", undefined, "paquete-card");
+
+        tarjeta.append(
+            elemento("h4", paquete.destino),
+            elemento("span", paquete.tipo, "tipo"),
+            elemento("p", paquete.pais),
+            elemento("p", `${paquete.fechaEntrada} al ${paquete.fechaSalida}`),
+            elemento("p", `${paquete.diasEstadia} días / ${paquete.noches} noches`),
+            elemento("div", precio(paquete.precioInicial), "precio")
         );
-    const botones =
-        document.createElement("div");
-    botones.className =
-        "paquete-botones";
-    const editar =
-        document.createElement("button");
-    editar.type = "button";
-    editar.className =
-        "btn-editar";
-    editar.textContent =
-        "Editar";
-    editar.addEventListener(
-        "click",
-        () => editarPaquete(paquete.id)
-    );
-    const eliminar =
-        document.createElement("button");
-    eliminar.type = "button";
-    eliminar.className =
-        "btn-eliminar";
-    eliminar.textContent =
-        "Eliminar";
-    eliminar.addEventListener(
-        "click",
-        () => eliminarPaquete(paquete.id)
-    );
-    botones.append(
-        editar,
-        eliminar
-    );
-    tarjeta.append(
-        arriba,
-        informacion,
-        precio,
-        botones
-    );
-    return tarjeta;
-}
-/*Info de la tarjeta */
-function crearInfo(
-    titulo,
-    valor
-) {
-    const div =
-        document.createElement("div");
-    div.className =
-        "info";
-    const span =
-        document.createElement("span");
-    span.textContent =
-        titulo;
-    const strong =
-        document.createElement("strong");
-    strong.textContent =
-        valor;
-    div.append(
-        span,
-        strong
-    );
-    return div;
-}
-/*Buscador */
-buscarPaquete.addEventListener(
-    "input",
-    mostrarPaquetes
-);
-/*Mensaje */
-function mostrarMensaje(texto) {
-    mensaje.textContent =
-        texto;
-    mensaje.classList.add(
-        "mostrar"
-    );
-    setTimeout(
-        () => {
-            mensaje.classList.remove(
-                "mostrar"
-            );
-        },
-        3000
-    );
-}
-/*Precio */
-function formatearPrecio(valor) {
-    return new Intl.NumberFormat(
-        "es-AR",
-        {
-            style: "currency",
-            currency: "ARS"
-        }
-    ).format(valor);
-}
-/*Fecha */
-function formatearFecha(fecha) {
-    if (!fecha) return "-";
-    const partes =
-        fecha.split("-");
-    if (partes.length !== 3) {
-        return fecha;
+
+        const botones = elemento("div", undefined, "paquete-botones");
+
+        const editar = elemento("button", "Editar", "btn-editar");
+        editar.type = "button";
+        editar.addEventListener("click", () => editarPaquete(paquete));
+
+        const eliminar = elemento("button", "Dar de baja", "btn-eliminar");
+        eliminar.type = "button";
+
+        eliminar.addEventListener("click", () => {
+            if (ocupado) return;
+
+            eliminando = paquete;
+            porId("mensajeEliminar").textContent =
+                `¿Dar de baja el paquete ${paquete.destino} · ${paquete.tipo}?`;
+
+            modal.classList.remove("oculto");
+        });
+
+        botones.append(editar, eliminar);
+        tarjeta.append(botones);
+        lista.append(tarjeta);
     }
-    return `${partes[2]}/${partes[1]}/${partes[0]}`;
 }
-/*Iniciar */
+
+async function cargarPaquetes() {
+    const datos = await api("/paquetes");
+
+    if (!Array.isArray(datos.paquetes)) {
+        throw new Error("La respuesta del catálogo no es válida.");
+    }
+
+    paquetes = datos.paquetes;
+    mostrarPaquetes();
+}
+
+form.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    if (ocupado || !autorizado) return;
+
+    const datos = obtenerDatos();
+
+    if (!datos.opciones.vuelos.length || !datos.opciones.hospedajes.length) {
+        avisar("Agregá al menos un vuelo y un hospedaje.");
+        return;
+    }
+
+    if (!datos.permiteSinAuto && !datos.opciones.autos.length) {
+        avisar("Agregá un auto o permití reservar sin auto.");
+        return;
+    }
+
+    const id = editando?.id;
+    let guardado = false;
+    bloquear(true);
+
+    try {
+        await api(
+            id ? `/paquetes/${encodeURIComponent(id)}` : "/paquetes",
+            {
+                method: id ? "PUT" : "POST",
+                body: JSON.stringify(datos)
+            }
+        );
+
+        guardado = true;
+        limpiarFormulario();
+        await cargarPaquetes();
+        avisar("Paquete guardado en la base de datos.");
+    } catch (error) {
+        avisar(guardado
+            ? "El paquete se guardó, pero falló la actualización del listado. Recargá la página."
+            : `${error.message} Si se cortó la conexión, recargá y revisá el listado antes de repetir.`
+        );
+    } finally {
+        bloquear(false);
+    }
+});
+
+porId("btnConfirmarEliminar").addEventListener("click", async () => {
+    if (ocupado || !autorizado || !eliminando) return;
+
+    const id = eliminando.id;
+    let eliminado = false;
+    bloquear(true);
+
+    try {
+        await api(`/paquetes/${encodeURIComponent(id)}`, {
+            method: "DELETE"
+        });
+
+        eliminado = true;
+        modal.classList.add("oculto");
+        eliminando = null;
+
+        if (editando?.id === id) limpiarFormulario();
+
+        await cargarPaquetes();
+        avisar("Paquete dado de baja.");
+    } catch (error) {
+        avisar(eliminado
+            ? "La baja se guardó. Recargá para actualizar el listado."
+            : error.message
+        );
+    } finally {
+        bloquear(false);
+    }
+});
+
+porId("btnCancelarEliminar").addEventListener("click", () => {
+    eliminando = null;
+    modal.classList.add("oculto");
+});
+
+porId("btnCancelar").addEventListener("click", limpiarFormulario);
+buscador.addEventListener("input", mostrarPaquetes);
+
+for (const [boton, grupo] of [
+    ["btnAgregarVuelo", "vuelos"],
+    ["btnAgregarHospedaje", "hospedajes"],
+    ["btnAgregarAuto", "autos"]
+]) {
+    porId(boton).addEventListener("click", () => {
+        agregarServicio(grupo);
+        actualizarResumen();
+    });
+}
+
+form.addEventListener("input", actualizarResumen);
+form.addEventListener("change", actualizarResumen);
+
+async function iniciar() {
+    for (const campo of ["precioInicial", "diasEstadia", "noches"]) {
+        porId(campo).readOnly = true;
+    }
+
+    bloquear(true);
+
+    try {
+        await api("/sesion");
+        autorizado = true;
+
+        limpiarFormulario();
+        await cargarPaquetes();
+    } catch (error) {
+        avisar(error.message);
+    } finally {
+        bloquear(false);
+    }
+}
+
 iniciar();
