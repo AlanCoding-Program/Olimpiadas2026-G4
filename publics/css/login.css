@@ -189,3 +189,20 @@ body {
 .passwordContainer button:hover {
     color: #38bdf8;
 }
+/* CELULARES CHICOS */
+@media (max-width: 400px)
+ {
+    header { padding: 25px 12px; } 
+    header h1 { font-size: 26px; } 
+    header p { font-size: 14px; } 
+    .destinos { padding: 10px; } 
+    .destino img { height: 180px; } 
+    .contenido { padding: 15px; } 
+    .contenido h2 { font-size: 21px; } 
+    .contenido button { font-size: 15px; padding: 11px; } 
+    .logo { width: 240px; min-height: 110px; } 
+    .modal-contenido { padding: 17px; } 
+    .modal-contenido img { height: 160px; } 
+    .modal-contenido h2 { font-size: 20px; } 
+    #tituloDestino { font-size: 19px; } 
+}

@@ -179,3 +179,37 @@ body {
 .passwordContainer button:hover {
     color: #38bdf8;
 }
+/* CELULAR */ 
+@media (max-width: 600px)
+{
+     body { background-attachment: scroll; } 
+     .logo { width: 280px; max-width: 90%; } 
+     .links { flex-direction: column; gap: 15px; } 
+     .redirect { font-size: 18px; } 
+     .registerHTML { margin-right: 0; } 
+     header { padding: 20px 15px 25px; } 
+     header h1 { font-size: 25px; margin-bottom: 20px; } 
+     .buscador input { width: 100%; max-width: 100%; font-size: 15px; padding: 13px 18px; } 
+     .btn-carrito { width: 100%; margin-top: 15px; } 
+     main { padding: 25px 15px; } 
+     main h2 { font-size: 24px; } 
+     .paquetes { grid-template-columns: 1fr; gap: 18px; } 
+     .card { padding: 20px; } 
+     .card h3 { font-size: 21px; } 
+     .card p { font-size: 17px; } 
+     .card .precio { font-size: 20px; } 
+     .carrito { width: 100%; max-width: 100%; } 
+     .productos-carrito { padding: 15px; } 
+     .carrito-footer { padding: 15px; max-height: 45dvh; } 
+    } 
+/* CELULARES PEQUEÑOS */ 
+@media (max-width: 400px) 
+{ 
+    .logo { width: 240px; } 
+    .redirect { font-size: 16px; } 
+    header h1 { font-size: 22px; } 
+    .card { padding: 17px; } 
+    .card h3 { font-size: 19px; } 
+    .carrito-header { padding: 15px; } 
+    .carrito-footer { padding: 12px; } 
+}

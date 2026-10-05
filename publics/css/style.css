@@ -124,3 +124,26 @@ summary {
 .redirect:hover {
     color: #6fc3ff;
 }
+/* CELULAR */
+@media (max-width: 600px) 
+{
+     body { background-attachment: scroll; } 
+     .logo { width: 280px; max-width: 90%; } 
+     .carrusel { width: 95%; height: 230px; margin: 30px auto; border-radius: 15px; } 
+     .box-questions { width: 95%; margin-bottom: 8px; } 
+     summary { padding: 13px; font-size: 15px; } 
+     .respuestas { font-size: 14px; line-height: 1.5; } 
+     .box-questions.abierto .respuestas { padding: 13px; } 
+     .links { flex-direction: column; gap: 15px; } 
+     .redirect { font-size: 18px; } 
+     .registerHTML { margin-right: 0; } 
+    } 
+/* CELULARES PEQUEÑOS */ 
+@media (max-width: 400px) 
+{
+     .logo { width: 240px; } 
+     .carrusel { width: 96%; height: 190px; margin: 25px auto; border-radius: 12px; } 
+     summary { padding: 11px; font-size: 14px; } 
+     .respuestas { font-size: 13px; } 
+     .redirect { font-size: 16px; } 
+}

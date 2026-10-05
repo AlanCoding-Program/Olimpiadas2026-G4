@@ -557,3 +557,18 @@ body {
         grid-template-columns: 1fr;
     }
 }
+/* CELULARES MUY CHICOS */ 
+@media (max-width: 400px)
+ { 
+    .contenedor { width: 94%; } 
+    .panel, 
+    .lista-section { padding: 14px; } 
+    .titulo h2 { font-size: 24px; } 
+    .logo h1 { font-size: 22px; } 
+    .campo input, 
+    .campo select, 
+    .buscador input { font-size: 14px; padding: 10px; } 
+    .paquete-card { padding: 15px; } 
+    .paquete-arriba h4 { font-size: 18px; } 
+    .precio { font-size: 20px; } 
+}
