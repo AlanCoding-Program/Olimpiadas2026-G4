@@ -447,4 +447,37 @@ async function iniciar() {
     }
 }
 
+porId("formDarAdmin").addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+
+    if (ocupado || !autorizado) return;
+
+    const nombre = porId("nombreNuevoAdmin").value.trim();
+    const email = porId("emailNuevoAdmin").value.trim();
+    const resultado = porId("resultadoDarAdmin");
+
+    const confirma = window.confirm(
+        `¿Dar permisos de administrador a ${nombre} (${email})?`
+    );
+
+    if (!confirma) return;
+
+    bloquear(true);
+    resultado.textContent = "Actualizando permisos…";
+
+    try {
+        const datos = await api("/usuarios/dar-admin", {
+            method: "POST",
+            body: JSON.stringify({ nombre, email })
+        });
+
+        resultado.textContent = datos.mensaje;
+        porId("formDarAdmin").reset();
+    } catch (error) {
+        resultado.textContent = error.message;
+    } finally {
+        bloquear(false);
+    }
+});
+
 iniciar();

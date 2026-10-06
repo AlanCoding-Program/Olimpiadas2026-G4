@@ -13,7 +13,38 @@
             <span>Panel de administración</span>
         </div>
         <a href="/views/index.html" class="btn-volver"> ← Volver a Home </a>
-</header>
+    </header>
+
+    <section class="panel">
+        <div class="panel-titulo">
+            <h3>Dar permisos de administrador</h3>
+        </div>
+        
+        <p>
+            La cuenta debe estar registrada. Ingresá su nombre tal como figura en el registro, sin el apellido.
+        </p>
+        
+        <form id="formDarAdmin">
+            <div class="form-grid">
+                <div class="campo">
+                    <label for="nombreNuevoAdmin">Nombre</label>
+                    <input type="text" id="nombreNuevoAdmin" maxlength="80" placeholder="Ej: Juan" required>
+                </div>
+                
+                <div class="campo">
+                    <label for="emailNuevoAdmin">Correo electrónico</label>
+                    <input type="email" id="emailNuevoAdmin" maxlength="254" placeholder="usuario@ejemplo.com" required>
+                </div>
+            </div>
+            
+            <div class="form-footer">
+                <button type="submit" class="btn-principal">Dar permisos de administrador</button>
+            </div>
+            
+            <p id="resultadoDarAdmin" role="status"></p>
+        </form>
+    </section>
+
     <section>
         <h2>Panel de Admin.</h2>
         <p>Creá, modificá o eliminá los paquetes de viajes disponibles.</p>
