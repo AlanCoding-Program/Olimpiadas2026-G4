@@ -1,5 +1,7 @@
 const logoutButton = document.getElementById("logoutButton");
 const adminButton = document.getElementById("adminButton");
+const loginButton = document.getElementById("loginButton");
+const registerButton = document.getElementById("registerHTML");
 
 if (logoutButton) {
     comprobarSesion();

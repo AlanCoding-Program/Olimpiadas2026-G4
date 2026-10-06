@@ -151,3 +151,19 @@ summary {
 #adminButton[hidden] {
     display: none !important;
 }
+
+.links [hidden] {
+    display: none !important;
+}
+
+#logoutButton {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+#logoutButton:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
